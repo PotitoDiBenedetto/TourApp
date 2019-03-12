@@ -2,6 +2,7 @@ package com.dibenedetto.potito.tourapp;
 
 import android.os.Bundle;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -9,26 +10,67 @@ import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    //attribute listener for bottom navigation bar
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+            //todo: remove
+            View view = findViewById(R.id.container);
+
+            switch (item.getItemId()) {
+                case R.id.navigation_coupons:
+                    //todo : open coupon activity
+                    Snackbar.make(view, "Replace with your own action - Coupons", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                    return true;
+                case R.id.navigation_photo:
+                    //todo: open diaries activity
+                    Snackbar.make(view, "Replace with your own action - Diaries", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                    return true;
+                case R.id.navigation_map:
+                    //todo: open explore activity
+                    Snackbar.make(view, "Replace with your own action - Explore", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                    return true;
+            }
+            return false;
+        }
+    };
+
+
+    //drawer layout
+    DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppThemeNoActionBar);
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //todo: move in the fragments
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,7 +80,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -46,11 +88,30 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        /*
+        // for changing the fragment
+        if (savedInstanceState == null) {
+            final Fragment mainFragment = new Fragment();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.anchor_point, mainFragment, "")
+                    .commit();
+        }
+        */
+
+        /*
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.anchor_point, nextFragment)
+                .commit();
+         */
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -85,7 +146,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
+/*
         if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
@@ -99,9 +160,10 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_send) {
 
         }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+*/
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 }
