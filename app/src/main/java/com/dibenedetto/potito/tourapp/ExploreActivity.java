@@ -6,8 +6,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.dibenedetto.potito.tourapp.fragments.ExploreFragment;
+import com.dibenedetto.potito.tourapp.fragments.HomeFragment;
+import com.dibenedetto.potito.tourapp.fragments.MainFragment;
+import com.dibenedetto.potito.tourapp.fragments.SettingsFragment;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -17,11 +21,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 
 public class ExploreActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    //attribute listener for bottom navigation bar
+    /*
+     * attribute listener for bottom navigation bar
+     */
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -53,8 +60,11 @@ public class ExploreActivity extends AppCompatActivity
     };
 
 
-    //drawer layout
-    DrawerLayout drawer;
+    /*
+     * drawer layout
+     */
+    private DrawerLayout drawer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +75,6 @@ public class ExploreActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        //todo: move in the fragments
-
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -81,15 +88,22 @@ public class ExploreActivity extends AppCompatActivity
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        /*
         // for changing the fragment
         if (savedInstanceState == null) {
-            final Fragment mainFragment = new Fragment();
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.anchor_point, mainFragment, "")
-                    .commit();
+/*
+            final Intent intent = getIntent();
+            if (intent == null) { */
+                //final Fragment mainFragment = new Fragment();
+                final HomeFragment mainFragment = HomeFragment.newInstance();
+                mainFragment.setRetainInstance(true);
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.anchor_point, mainFragment, "")
+                        //.addToBackStack(null)
+                        .commit();
+            } /* else {
+                //recupera l'action dell'intent e carica il fragment idoneo
+            }
         }
-        */
 
         /*
         getSupportFragmentManager().beginTransaction()
@@ -98,14 +112,20 @@ public class ExploreActivity extends AppCompatActivity
          */
     }
 
+
     @Override
     public void onBackPressed() {
 
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        } else if ( getFragmentManager().getBackStackEntryCount() > 0)
+            {
+                getFragmentManager().popBackStack();
+                return;
+            } else {
             super.onBackPressed();
         }
+
     }
 
     @Override
@@ -134,23 +154,92 @@ public class ExploreActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
+        final int id = item.getItemId();
+        final Fragment nextFragment;
 
-        if (id == R.id.nav_settings) {
-            final Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_diaires) {
-
-        } else if (id == R.id.nav_coupons) {
-
-        } else if (id == R.id.nav_photo) {
-
-        } else if (id == R.id.nav_map) {
-
+        switch(id) {
+            case R.id.nav_settings:
+                nextFragment = new SettingsFragment();
+                nextFragment.setRetainInstance(true);
+                break;
+            case R.id.nav_explore:
+                nextFragment = new ExploreFragment();
+                nextFragment.setRetainInstance(true);
+                break;/*
+            case R.id.nav_diaires:
+                //nextFragment = new DiariesFragment();
+                //nextFragment.setRetainInstance(true);
+                break;
+            case R.id.nav_coupons:
+                //nextFragment = new CouponsFragment();
+                //nextFragment.setRetainInstance(true);
+                break;
+            case R.id.nav_photo:
+                //nextFragment = new PhotoFragment();
+                //nextFragment.setRetainInstance(true);
+                break;
+            case R.id.nav_map:
+                //nextFragment = new MapFragment();
+                //nextFragment.setRetainInstance(true);
+                break; */
+            default:
+                //throw new IllegalArgumentException("No Fragment for the given menu item");
+                drawer.closeDrawer(GravityCompat.START);//delete me !
+                return true;//delete this!
         }
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.anchor_point, nextFragment)
+                .addToBackStack(null)
+                .commit();
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
+    /*
+     * gestione dei click nella schermata home
+     */
+    public void onHomeCardClicked(View view) {
+        int id = view.getId();
 
+        final Fragment nextFragment;
+
+        switch (id) {
+            case R.id.home_settings:
+                nextFragment = new SettingsFragment();
+                nextFragment.setRetainInstance(true);
+                break;
+            case R.id.home_explore:
+                nextFragment = new ExploreFragment();
+                nextFragment.setRetainInstance(true);
+                break;/*
+            case R.id.nav_diaires:
+                //nextFragment = new DiariesFragment();
+                //nextFragment.setRetainInstance(true);
+                break;
+            case R.id.nav_coupons:
+                //nextFragment = new CouponsFragment();
+                //nextFragment.setRetainInstance(true);
+                break;
+            case R.id.nav_photo:
+                //nextFragment = new PhotoFragment();
+                //nextFragment.setRetainInstance(true);
+                break;
+            case R.id.nav_map:
+                //nextFragment = new MapFragment();
+                //nextFragment.setRetainInstance(true);
+                break; */
+            default:
+                //throw new IllegalArgumentException("No Fragment for the given menu item");
+                Snackbar.make(view, "Replace with your own action - Explore", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                return;
+
+        }
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.anchor_point, nextFragment)
+                .addToBackStack(null)
+                .commit();
+
+    }
 }

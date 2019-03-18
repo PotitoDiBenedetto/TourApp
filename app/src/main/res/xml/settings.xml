@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/config_data_title">
+        <ListPreference
+            android:dialogTitle="@string/max_radius_title"
+            android:entries="@array/max_radius_entries"
+            android:entryValues="@array/max_radius_values"
+            android:key="max_radius"
+            android:summary="@string/max_radius_summary"
+            android:title="@string/max_radius_title"/>
+        <ListPreference
+            android:dialogTitle="@string/max_result_number_title"
+            android:entries="@array/max_result_number_entries"
+            android:entryValues="@array/max_result_number_values"
+            android:key="max_result_number"
+            android:summary="@string/max_result_number_summary"
+            android:title="@string/max_result_number_title"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/optional_services_title">
+        <CheckBoxPreference
+            android:key="broadcast_message"
+            android:summary="@string/summary_broadcast_message"
+            android:title="@string/title_broadcast_message"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.dibenedetto.potito.tourapp.R;
+import com.dibenedetto.potito.tourapp.util.ViewUtility;
+import com.google.android.material.snackbar.Snackbar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -67,7 +69,17 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        final View layout = inflater.inflate(R.layout.home_fragment, container, false);
+        View explore = ViewUtility.findViewById(layout, R.id.card_view_explore);
+
+        explore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Snackbar.make(layout, "Replace with your own action - Explore", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+        return layout;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -80,12 +92,13 @@ public class MainFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        /*
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
-        }
+        }*/
     }
 
     @Override
