@@ -1,0 +1,60 @@
+CREATE TABLE Diari (
+    _id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+    data TEXT NOT NULL,
+    nome TEXT NOT NULL UNIQUE
+);
+
+CREATE INDEX unique_name_diario ON Diari(nome);
+
+CREATE TABLE Categoria_secondaria (
+    _id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+    nome TEXT NOT NULL,
+    categoria_primaria INTEGER NOT NULL,
+    FOREIGN KEY(categoria_primaria) REFERENCES Categoria_primaria(_id)
+);
+
+CREATE TABLE Categoria_primaria (
+    _id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+    nome TEXT NOT NULL UNIQUE
+
+);
+
+CREATE INDEX unique_name_cat1 ON Categoria_primaria(nome);
+CREATE INDEX unique_name_cat2 ON Categoria_secondaria(nome);
+
+CREATE TABLE Location (
+    _id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+    latitude REAL NOT NULL,
+    longitude REAL NOT NULL,
+    nome TEXT NOT NULL UNIQUE,
+    indirizzo TEXT,
+    orari TEXT,
+    costo INTEGER,
+    categoria INTEGER NOT NULL,
+    FOREIGN KEY(categoria) REFERENCES Categoria_secondaria(_id)
+);
+
+CREATE INDEX unique_name_location ON Location(nome);
+
+CREATE TABLE Foto_ricordo (
+    _id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+    data TEXT NOT NULL,
+    commento TEXT NOT NULL,
+    foto_path TEXT NOT NULL UNIQUE,
+    diario INTEGER NOT NULL,
+    latitude REAL,
+    longitude REAL,
+    FOREIGN KEY(diario) REFERENCES Diario(_id),
+);
+
+CREATE INDEX unique_photo_path ON Foto_ricordo(foto_path);
+
+CREATE TABLE Coupon (
+    _id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+    scadenza TEXT,
+    dettaglio TEXT,
+    nome TEXT,
+    file TEXT,
+    location INTEGER NOT NULL,
+    FOREIGN KEY(location) REFERENCES Location(_id)
+);

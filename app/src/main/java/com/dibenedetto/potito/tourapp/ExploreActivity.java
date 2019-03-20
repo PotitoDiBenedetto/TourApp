@@ -1,16 +1,16 @@
 package com.dibenedetto.potito.tourapp;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.dibenedetto.potito.tourapp.db.TourAppRoomDatabase;
 import com.dibenedetto.potito.tourapp.fragments.ExploreFragment;
 import com.dibenedetto.potito.tourapp.fragments.HomeFragment;
-import com.dibenedetto.potito.tourapp.fragments.MainFragment;
 import com.dibenedetto.potito.tourapp.fragments.SettingsFragment;
 
+import com.dibenedetto.potito.tourapp.util.FilesUtil;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -25,6 +25,11 @@ import androidx.fragment.app.Fragment;
 
 public class ExploreActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    //this app db reference
+    public static TourAppRoomDatabase db;
+
+    public static final String DB_NAME = "TourApp.db";
 
     /*
      * attribute listener for bottom navigation bar
@@ -110,6 +115,9 @@ public class ExploreActivity extends AppCompatActivity
                 .replace(R.id.anchor_point, nextFragment)
                 .commit();
          */
+
+    ExploreActivity.db = FilesUtil.buildDatabase(getApplicationContext(), DB_NAME);
+
     }
 
 
