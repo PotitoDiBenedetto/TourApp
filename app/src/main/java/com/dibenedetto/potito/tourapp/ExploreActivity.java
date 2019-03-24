@@ -10,7 +10,6 @@ import com.dibenedetto.potito.tourapp.fragments.ExploreFragment;
 import com.dibenedetto.potito.tourapp.fragments.HomeFragment;
 import com.dibenedetto.potito.tourapp.fragments.SettingsFragment;
 
-import com.dibenedetto.potito.tourapp.util.FilesUtil;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -116,7 +115,7 @@ public class ExploreActivity extends AppCompatActivity
                 .commit();
          */
 
-    ExploreActivity.db = FilesUtil.buildDatabase(getApplicationContext(), DB_NAME);
+    ExploreActivity.db = TourAppRoomDatabase.getDatabase(getApplicationContext(), DB_NAME);
 
     }
 

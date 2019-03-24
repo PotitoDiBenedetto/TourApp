@@ -6,7 +6,7 @@ import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "Coupon", foreignKeys = @ForeignKey(entity = Location.class,
-        parentColumns = "_id", childColumns = "location"))
+        parentColumns = "_id_", childColumns = "location"))
 public class Coupon {
 
     @PrimaryKey(autoGenerate = true)

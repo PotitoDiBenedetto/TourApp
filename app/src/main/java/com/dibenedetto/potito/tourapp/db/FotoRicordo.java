@@ -3,10 +3,11 @@ package com.dibenedetto.potito.tourapp.db;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "Foto_ricordo", foreignKeys = @ForeignKey(entity = Diari.class,
-        parentColumns = "_id", childColumns = "diario"))
+        parentColumns = "_id", childColumns = "diario"), indices= @Index( name = "diario_index", unique=false, value="diario"))
 public class FotoRicordo {
 
     @PrimaryKey(autoGenerate = true)

@@ -10,16 +10,16 @@
     <color name="primaryTextColor">#ffffff</color>
     <color name="primaryTransparentLightColor">#83768FFF</color>
     <color name="colorSecondary">#0044FF</color>
-    <color name="blue_cippy">#01579b</color>
+    <color name="blue_cippy">#01579B</color>
     <color name="blue_cippy_light">#0277bd</color>
     <color name="cippy_bianco">#e1f5fe</color>
     <color name="cippy_ombra">#b3e5fc</color>
 
     <color name="new_primaryColor">#01579b</color>
     <color name="new_primaryLightColor">#4F83CC</color>
-    <color name="new_primaryDarkColor">#002f6c</color>
-    <color name="new_secondaryColor">#cfd8dc</color>
-    <color name="new_secondaryLightColor">#ffffff</color>
+    <color name="new_primaryDarkColor">#002F6C</color>
+    <color name="new_secondaryColor">#CFD8DC</color>
+    <color name="new_secondaryLightColor">#FFFFFF</color>
     <color name="new_secondaryDarkColor">#9ea7aa</color>
     <color name="new_primaryTextColor">#ffffff</color>
     <color name="new_secondaryTextColor">#000000</color>

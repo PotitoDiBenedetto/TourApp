@@ -16,5 +16,5 @@ public interface CouponDAO {
     List<Coupon> getCoupons();
 
     @Query("SELECT * FROM Coupon WHERE location = :location ORDER BY _id")
-    List<Coupon> getCouponByLocation(Location location);
+    List<Coupon> getCouponByLocation(int location);
 }

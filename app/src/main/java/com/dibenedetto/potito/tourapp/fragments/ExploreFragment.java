@@ -9,14 +9,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dibenedetto.potito.tourapp.R;
+import com.dibenedetto.potito.tourapp.ViewModels.LocationsViewModel;
+import com.dibenedetto.potito.tourapp.db.Location;
+import com.dibenedetto.potito.tourapp.db.LocationDAO;
 import com.dibenedetto.potito.tourapp.model.CategoryItem;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 //import androidx.appcompat.app.AppCompatActivity;
+import com.dibenedetto.potito.tourapp.ui.AddressTextView;
 import com.dibenedetto.potito.tourapp.util.ViewUtility;
 
 import java.lang.ref.WeakReference;
@@ -28,17 +35,17 @@ public class ExploreFragment extends Fragment {
     /**
      *
      */
-    private ExploreViewModel mViewModel;
+    private LocationsViewModel mViewModel;
 
     /**
      * The Reference of the OnCategoryItemSelectedListener if any
      */
-    private WeakReference<OnCategoryItemSelectedListener> mOnCategoryItemSelectedListenerRef;
+    private WeakReference<OnLocationItemSelectedListener> mOnLocationItemSelectedListenerRef;
 
     /**
-     * The Model
+     * The Category Model
      */
-    private List<CategoryItem> mModel = new LinkedList<>();
+    private List<LocationDAO.LocationWithCategory> mModel = new LinkedList<>();
 
     /**
      * The RecyclerView
@@ -46,26 +53,31 @@ public class ExploreFragment extends Fragment {
     private RecyclerView mRecyclerView;
 
     /**
+     * the adapter
+     */
+    private LocationAdapter mAdapter;
+
+    /**
      * Number of columns for the grid layout
      */
-    private static final int COLS_NUMBER = 2;
+    //private static final int COLS_NUMBER = 2;
 
     /**
      * The Adapter for the CategoryItem model
      */
-    private CategoryAdapter mAdapter;
+    private LocationAdapter mLocationAdapter;
 
     /**
      *
      */
-    public interface OnCategoryItemSelectedListener {
+    public interface OnLocationItemSelectedListener {
 
         /**
          * Invoked when we select a catItem
          *
-         * @param catItem The selected catItem
+         * @param locItem The selected catItem
          */
-        void onCategoryItemSelected(CategoryItem catItem);
+        void onLocationItemSelected(LocationDAO.LocationWithCategory locItem);
     }
 
     /**
@@ -76,6 +88,7 @@ public class ExploreFragment extends Fragment {
 
         private ImageView mImage;
         private TextView mText;
+        private AddressTextView mAddress;
 
         private WeakReference<OnItemClickListener> mOnItemClickListenerRef;
 
@@ -99,8 +112,10 @@ public class ExploreFragment extends Fragment {
          */
         public ItemViewHolder(View itemView) {
             super(itemView);
-            mImage = ViewUtility.findViewById(itemView, R.id.category_image);
-            mText = ViewUtility.findViewById(itemView, R.id.category_text);
+            mImage = ViewUtility.findViewById(itemView, R.id.category_icon);
+            mText = ViewUtility.findViewById(itemView, R.id.location_name);
+            mAddress = ViewUtility.findViewById(itemView, R.id.location_address_view);
+
 
             // We register the listener for the onClick
             itemView.setOnClickListener(ExploreFragment.ItemViewHolder.this);
@@ -118,11 +133,18 @@ public class ExploreFragment extends Fragment {
         /**
          * This binds the model to the View
          *
-         * @param catItem The model to map
+         * @param loc The model to map
          */
-        public void bind(CategoryItem catItem) {
-            mImage.setImageResource(catItem.mImage);
-            mText.setText(catItem.mText);
+        public void bind(LocationDAO.LocationWithCategory loc) {
+            mImage.setImageResource(getCategoryIconId(loc));
+            mText.setText(loc.location.nomeLocation);
+            mAddress.setText(loc.location.indirizzo);
+        }
+
+        public void bindEmpty() {
+            mImage.setImageResource(R.mipmap.ic_tourapp_round);
+            mText.setText("loading");
+            mAddress.setText("loading");
         }
 
         @Override
@@ -135,59 +157,78 @@ public class ExploreFragment extends Fragment {
             }
         }
 
+        int getCategoryIconId(LocationDAO.LocationWithCategory loc) {
+            int id=0;
+            switch(loc.categoriaPrimaria._id) {
+                case 1:
+                    id = R.mipmap.ic_resturants_round;
+                    break;
+                case 2:
+                    id = R.mipmap.ic_hotel_round;
+                    break;
+                case 3:
+                    id = R.mipmap.ic_locations_round;
+                    break;
+                case 4:
+                    id = R.mipmap.ic_infopoint_round;
+                    break;
+            }
+            return id;
+        }
+
     }
 
     /**
      * This is the Adapter that has the responsibility to access the model, create the ViewHolder
      * and bind data
      */
-    public final static class CategoryAdapter extends RecyclerView.Adapter<ItemViewHolder>
+    public final static class LocationAdapter extends RecyclerView.Adapter<ItemViewHolder>
             implements ItemViewHolder.OnItemClickListener {
 
         /**
          * The model for the Adapter
          */
-        private final List<CategoryItem> mModel;
+        private List<LocationDAO.LocationWithCategory> mModel;
 
         /**
          * The Reference to the Listener for CategoryItem selection
          */
-        private WeakReference<OnCategoryItemListener> mOnCategoryItemListenerRef;
+        private WeakReference<OnLocationItemListener> mOnLocationItemListenerRef;
 
-        private OnCategoryItemListener mOnCategoryItemListener;
+        private OnLocationItemListener mOnLocationItemListener;
 
         /**
          * This is the interface to implement to listen to the click on the item
          */
-        public interface OnCategoryItemListener {
+        public interface OnLocationItemListener {
 
             /**
-             * Invoked when we select a category item
+             * Invoked when we select a Location item
              *
-             * @param catItem  The selected CategoryItem
+             * @param loc  The selected LocationItem
              * @param position The selected position
              */
-            void onCategoryItemClicked(CategoryItem catItem, int position);
+            void onLocationItemClicked(LocationDAO.LocationWithCategory loc, int position);
 
         }
 
         /**
-         * Creates a CategoryItemAdapter for the given model
+         * Creates a LocationItemAdapter for the given model
          *
          * @param model The model for this Adapter
          */
-        CategoryAdapter(final List<CategoryItem> model) {
+        LocationAdapter(final List<LocationDAO.LocationWithCategory> model) {
             this.mModel = model;
         }
 
         /**
-         * We use this to register a specific OnCategoryItemListener
+         * We use this to register a specific OnLocationItemListener
          *
-         * @param onCategoryItemListener The OnCategoryItemListener
+         * @param onLocationItemListener The OnLocationItemListener
          */
-        public void setOnCategoryItemListener(final OnCategoryItemListener onCategoryItemListener) {
-            this.mOnCategoryItemListenerRef = new WeakReference<OnCategoryItemListener>(onCategoryItemListener);
-            this.mOnCategoryItemListener = onCategoryItemListener;
+        public void setOnLocationItemListener(final OnLocationItemListener onLocationItemListener) {
+            this.mOnLocationItemListenerRef = new WeakReference<OnLocationItemListener>(onLocationItemListener);
+            this.mOnLocationItemListener = onLocationItemListener;
         }
 
         @Override
@@ -196,7 +237,7 @@ public class ExploreFragment extends Fragment {
 
             //for a single type of row
       final View layout = LayoutInflater.from(viewGroup.getContext())
-              .inflate(R.layout.card_view_item_layout, viewGroup, false);
+              .inflate(R.layout.location_row, viewGroup, false);
       return new ItemViewHolder(layout);
 
 
@@ -204,22 +245,36 @@ public class ExploreFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(ItemViewHolder itemViewHolder, int position) {
-            itemViewHolder.bind(mModel.get(position));
-            itemViewHolder.setOnItemClickListener(ExploreFragment.CategoryAdapter.this);
+
+            if(mModel != null) {
+                itemViewHolder.bind(mModel.get(position));
+            } else {
+                itemViewHolder.bindEmpty();
+            }
+                itemViewHolder.setOnItemClickListener(ExploreFragment.LocationAdapter.this);
+
         }
 
         @Override
         public int getItemCount() {
-            return mModel.size();
+
+            if (mModel != null)
+                return mModel.size();
+            else return 0;
+
         }
 
 
         @Override
         public void onItemClicked(int position) {
 
-            OnCategoryItemListener listener;
-            this.mOnCategoryItemListener.onCategoryItemClicked(mModel.get(position), position);
-            //}
+            OnLocationItemListener listener;
+            this.mOnLocationItemListener.onLocationItemClicked(mModel.get(position), position);
+        }
+
+        void setLocations(List<LocationDAO.LocationWithCategory> locations){
+            mModel = locations;
+            notifyDataSetChanged();
         }
     }
 
@@ -244,9 +299,9 @@ public class ExploreFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnCategoryItemSelectedListener) {
-            final OnCategoryItemSelectedListener listener = (OnCategoryItemSelectedListener) context;
-            mOnCategoryItemSelectedListenerRef = new WeakReference<OnCategoryItemSelectedListener>(listener);
+        if (context instanceof OnLocationItemSelectedListener) {
+            final OnLocationItemSelectedListener listener = (OnLocationItemSelectedListener) context;
+            mOnLocationItemSelectedListenerRef = new WeakReference<OnLocationItemSelectedListener>(listener);
         }
 
     }
@@ -257,9 +312,9 @@ public class ExploreFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        if (mOnCategoryItemSelectedListenerRef != null) {
-            mOnCategoryItemSelectedListenerRef.clear();
-            mOnCategoryItemSelectedListenerRef = null;
+        if (mOnLocationItemSelectedListenerRef != null) {
+            mOnLocationItemSelectedListenerRef.clear();
+            mOnLocationItemSelectedListenerRef = null;
             //mActivity = null;
 
         }
@@ -269,7 +324,16 @@ public class ExploreFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        createModel();
+        mViewModel = ViewModelProviders.of(this).get(LocationsViewModel.class);
+        mViewModel.getAllLocationsWithCategories().observe(this, new Observer<List<LocationDAO.LocationWithCategory>>() {
+            @Override
+            public void onChanged(@Nullable final List<LocationDAO.LocationWithCategory> locations) {
+                // Update the cached copy of the words in the adapter.
+                mAdapter.setLocations(locations);
+            }
+        });
+
+        //createModel();
         //setHasOptionsMenu(true);
     }
 
@@ -302,8 +366,8 @@ public class ExploreFragment extends Fragment {
         super.onActivityCreated(savedInstance);
         setRetainInstance(true);
 
-        final GridLayoutManager layoutManager = new GridLayoutManager(getContext(), COLS_NUMBER,
-                GridLayoutManager.HORIZONTAL, false);
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setOrientation(RecyclerView.VERTICAL);
 
         if(savedInstance == null) {
             layoutManager.scrollToPosition(0);
@@ -313,10 +377,10 @@ public class ExploreFragment extends Fragment {
 
 
         // The adapter
-        mAdapter = new CategoryAdapter(mModel);
-        mAdapter.setOnCategoryItemListener(new CategoryAdapter.OnCategoryItemListener() {
+        mAdapter = new LocationAdapter(mModel);
+        mAdapter.setOnLocationItemListener(new LocationAdapter.OnLocationItemListener() {
             @Override
-            public void onCategoryItemClicked(CategoryItem catItem, int position) {
+            public void onLocationItemClicked(LocationDAO.LocationWithCategory loc, int position) {
 
 
 
@@ -345,7 +409,7 @@ public class ExploreFragment extends Fragment {
     }
 
     /**
-     * Utility method that creates the CategoryModel
+     * Utility method that creates the LocationModel
      */
     private void createModel() {
         mModel.clear();
@@ -370,9 +434,9 @@ public class ExploreFragment extends Fragment {
         /**
          * Invoked when we select an item
          *
-         * @param catItem The selected category item
+         * @param catItem The selected Location item
          */ /*
-        void onCardItemSelected(CategoryItem catItem);
+        void onCardItemSelected(LocationWithCategory loc);
 
     }
     */

@@ -30,6 +30,8 @@ CREATE TABLE Location (
     indirizzo TEXT,
     orari TEXT,
     costo INTEGER,
+    dettaglio TEXT,
+    url TEXT,
     categoria INTEGER NOT NULL,
     FOREIGN KEY(categoria) REFERENCES Categoria_secondaria(_id)
 );

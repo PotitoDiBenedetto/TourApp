@@ -10,10 +10,10 @@ import androidx.room.PrimaryKey;
 public class CategoriaSecondaria {
 
     @PrimaryKey(autoGenerate = true)
-    public int _id;
+    public int _id__;
 
-    @ColumnInfo(name = "nome")
-    public String nome;
+    @ColumnInfo(name = "nomeSec")
+    public String nomeSec;
 
     @ColumnInfo(name = "categoria_primaria")
     public int categoria_primaria;
