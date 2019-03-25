@@ -3,10 +3,11 @@ package com.dibenedetto.potito.tourapp.db;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "Coupon", foreignKeys = @ForeignKey(entity = Location.class,
-        parentColumns = "_id_", childColumns = "location"))
+        parentColumns = "_id_location", childColumns = "location"), indices = @Index(name="couponLocation", value="location"))
 public class Coupon {
 
     @PrimaryKey(autoGenerate = true)

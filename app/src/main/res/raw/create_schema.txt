@@ -7,36 +7,36 @@ CREATE TABLE Diari (
 CREATE INDEX unique_name_diario ON Diari(nome);
 
 CREATE TABLE Categoria_secondaria (
-    _id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-    nome TEXT NOT NULL,
+    _id_categoria_secondaria INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+    nome_categoria_secondaria TEXT NOT NULL,
     categoria_primaria INTEGER NOT NULL,
-    FOREIGN KEY(categoria_primaria) REFERENCES Categoria_primaria(_id)
+    FOREIGN KEY(categoria_primaria) REFERENCES Categoria_primaria(_id_categoria_primaria)
 );
 
 CREATE TABLE Categoria_primaria (
-    _id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-    nome TEXT NOT NULL UNIQUE
+    _id_categoria_primaria INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+    nome_categoria_primaria TEXT NOT NULL UNIQUE
 
 );
 
-CREATE INDEX unique_name_cat1 ON Categoria_primaria(nome);
-CREATE INDEX unique_name_cat2 ON Categoria_secondaria(nome);
+CREATE INDEX unique_name_cat1 ON Categoria_primaria(nome_categoria_primaria);
+CREATE INDEX unique_name_cat2 ON Categoria_secondaria(nome_categoria_secondaria);
 
 CREATE TABLE Location (
-    _id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+    _id_location INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
     latitude REAL NOT NULL,
     longitude REAL NOT NULL,
-    nome TEXT NOT NULL UNIQUE,
+    nome_location TEXT NOT NULL UNIQUE,
     indirizzo TEXT,
     orari TEXT,
     costo INTEGER,
     dettaglio TEXT,
     url TEXT,
     categoria INTEGER NOT NULL,
-    FOREIGN KEY(categoria) REFERENCES Categoria_secondaria(_id)
+    FOREIGN KEY(categoria) REFERENCES Categoria_secondaria(_id_categoria_secondaria)
 );
 
-CREATE INDEX unique_name_location ON Location(nome);
+CREATE INDEX unique_name_location ON Location(nome_location);
 
 CREATE TABLE Foto_ricordo (
     _id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -46,7 +46,7 @@ CREATE TABLE Foto_ricordo (
     diario INTEGER NOT NULL,
     latitude REAL,
     longitude REAL,
-    FOREIGN KEY(diario) REFERENCES Diario(_id),
+    FOREIGN KEY(diario) REFERENCES Diari(_id),
 );
 
 CREATE INDEX unique_photo_path ON Foto_ricordo(foto_path);
@@ -58,5 +58,7 @@ CREATE TABLE Coupon (
     nome TEXT,
     file TEXT,
     location INTEGER NOT NULL,
-    FOREIGN KEY(location) REFERENCES Location(_id)
+    FOREIGN KEY(location) REFERENCES Location(_id_location)
 );
+
+

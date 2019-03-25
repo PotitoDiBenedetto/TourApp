@@ -9,10 +9,10 @@ import androidx.room.PrimaryKey;
 public class CategoriaPrimaria {
 
     @PrimaryKey(autoGenerate = true)
-    public int _id;
+    public int _id_categoria_primaria;
 
-    @ColumnInfo(name = "nomePri")
-    public String nomePri;
+    @ColumnInfo(name = "nome_categoria_primaria")
+    public String nome_categoria_primaria;
 
     public CategoriaPrimaria(){}
 

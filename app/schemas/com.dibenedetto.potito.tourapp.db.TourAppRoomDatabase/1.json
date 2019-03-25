@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "cd00a89b3215d43f371c0770c4511d83",
+    "identityHash": "b8dc763adacd54f69a70c41845754cbc",
     "entities": [
       {
         "tableName": "Diari",
@@ -38,24 +38,24 @@
       },
       {
         "tableName": "Categoria_primaria",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `nomePri` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id_categoria_primaria` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `nome_categoria_primaria` TEXT)",
         "fields": [
           {
-            "fieldPath": "_id",
-            "columnName": "_id",
+            "fieldPath": "_id_categoria_primaria",
+            "columnName": "_id_categoria_primaria",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "nomePri",
-            "columnName": "nomePri",
+            "fieldPath": "nome_categoria_primaria",
+            "columnName": "nome_categoria_primaria",
             "affinity": "TEXT",
             "notNull": false
           }
         ],
         "primaryKey": {
           "columnNames": [
-            "_id"
+            "_id_categoria_primaria"
           ],
           "autoGenerate": true
         },
@@ -64,17 +64,17 @@
       },
       {
         "tableName": "Categoria_secondaria",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id__` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `nomeSec` TEXT, `categoria_primaria` INTEGER NOT NULL, FOREIGN KEY(`categoria_primaria`) REFERENCES `Categoria_primaria`(`_id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id_categoria_secondaria` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `nome_categoria_secondaria` TEXT, `categoria_primaria` INTEGER NOT NULL, FOREIGN KEY(`categoria_primaria`) REFERENCES `Categoria_primaria`(`_id_categoria_primaria`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
-            "fieldPath": "_id__",
-            "columnName": "_id__",
+            "fieldPath": "_id_categoria_secondaria",
+            "columnName": "_id_categoria_secondaria",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "nomeSec",
-            "columnName": "nomeSec",
+            "fieldPath": "nome_categoria_secondaria",
+            "columnName": "nome_categoria_secondaria",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -87,11 +87,20 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "_id__"
+            "_id_categoria_secondaria"
           ],
           "autoGenerate": true
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "catPriSec",
+            "unique": false,
+            "columnNames": [
+              "categoria_primaria"
+            ],
+            "createSql": "CREATE  INDEX `catPriSec` ON `${TABLE_NAME}` (`categoria_primaria`)"
+          }
+        ],
         "foreignKeys": [
           {
             "table": "Categoria_primaria",
@@ -101,18 +110,18 @@
               "categoria_primaria"
             ],
             "referencedColumns": [
-              "_id"
+              "_id_categoria_primaria"
             ]
           }
         ]
       },
       {
         "tableName": "Location",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id_` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, `nomeLocation` TEXT, `indirizzo` TEXT, `orari` TEXT, `costo` INTEGER NOT NULL, `categoria` INTEGER NOT NULL, FOREIGN KEY(`categoria`) REFERENCES `Categoria_secondaria`(`_id__`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id_location` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, `nome_location` TEXT, `indirizzo` TEXT, `orari` TEXT, `costo` INTEGER NOT NULL, `categoria` INTEGER NOT NULL, FOREIGN KEY(`categoria`) REFERENCES `Categoria_secondaria`(`_id_categoria_secondaria`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
-            "fieldPath": "_id_",
-            "columnName": "_id_",
+            "fieldPath": "_id_location",
+            "columnName": "_id_location",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -129,8 +138,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "nomeLocation",
-            "columnName": "nomeLocation",
+            "fieldPath": "nome_location",
+            "columnName": "nome_location",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -161,11 +170,20 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "_id_"
+            "_id_location"
           ],
           "autoGenerate": true
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "locationCategory",
+            "unique": false,
+            "columnNames": [
+              "categoria"
+            ],
+            "createSql": "CREATE  INDEX `locationCategory` ON `${TABLE_NAME}` (`categoria`)"
+          }
+        ],
         "foreignKeys": [
           {
             "table": "Categoria_secondaria",
@@ -175,7 +193,7 @@
               "categoria"
             ],
             "referencedColumns": [
-              "_id__"
+              "_id_categoria_secondaria"
             ]
           }
         ]
@@ -259,7 +277,7 @@
       },
       {
         "tableName": "Coupon",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `scadenza` TEXT, `dettaglio` TEXT, `nome` TEXT, `file` TEXT, `location` INTEGER NOT NULL, FOREIGN KEY(`location`) REFERENCES `Location`(`_id_`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `scadenza` TEXT, `dettaglio` TEXT, `nome` TEXT, `file` TEXT, `location` INTEGER NOT NULL, FOREIGN KEY(`location`) REFERENCES `Location`(`_id_location`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "_id",
@@ -304,7 +322,16 @@
           ],
           "autoGenerate": true
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "couponLocation",
+            "unique": false,
+            "columnNames": [
+              "location"
+            ],
+            "createSql": "CREATE  INDEX `couponLocation` ON `${TABLE_NAME}` (`location`)"
+          }
+        ],
         "foreignKeys": [
           {
             "table": "Location",
@@ -314,7 +341,7 @@
               "location"
             ],
             "referencedColumns": [
-              "_id_"
+              "_id_location"
             ]
           }
         ]
@@ -323,7 +350,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"cd00a89b3215d43f371c0770c4511d83\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"b8dc763adacd54f69a70c41845754cbc\")"
     ]
   }
 }

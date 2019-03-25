@@ -3,14 +3,15 @@ package com.dibenedetto.potito.tourapp.db;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "Location", foreignKeys = @ForeignKey(entity = CategoriaSecondaria.class,
-        parentColumns = "_id__", childColumns = "categoria"))
+        parentColumns = "_id_categoria_secondaria", childColumns = "categoria"), indices = @Index(name="locationCategory", value="categoria"))
 public class Location {
 
     @PrimaryKey(autoGenerate = true)
-    public int _id_;
+    public int _id_location;
 
     @ColumnInfo
     public double latitude;
@@ -19,7 +20,7 @@ public class Location {
     public double longitude;
 
     @ColumnInfo
-    public String nomeLocation;
+    public String nome_location;
 
     @ColumnInfo
     public String indirizzo;

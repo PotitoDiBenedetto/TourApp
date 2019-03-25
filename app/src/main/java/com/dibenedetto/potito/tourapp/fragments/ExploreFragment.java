@@ -137,7 +137,7 @@ public class ExploreFragment extends Fragment {
          */
         public void bind(LocationDAO.LocationWithCategory loc) {
             mImage.setImageResource(getCategoryIconId(loc));
-            mText.setText(loc.location.nomeLocation);
+            mText.setText(loc.location.nome_location);
             mAddress.setText(loc.location.indirizzo);
         }
 
@@ -159,7 +159,7 @@ public class ExploreFragment extends Fragment {
 
         int getCategoryIconId(LocationDAO.LocationWithCategory loc) {
             int id=0;
-            switch(loc.categoriaPrimaria._id) {
+            switch(loc.categoriaPrimaria._id_categoria_primaria) {
                 case 1:
                     id = R.mipmap.ic_resturants_round;
                     break;
