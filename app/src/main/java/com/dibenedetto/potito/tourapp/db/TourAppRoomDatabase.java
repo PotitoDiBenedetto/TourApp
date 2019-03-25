@@ -31,7 +31,7 @@ public abstract class TourAppRoomDatabase extends RoomDatabase {
 
             final File dbFile = context.getDatabasePath(DB_NAME);
 
-            if(/*!dbFile.exists()*/true) {
+            if(!dbFile.exists()) {
                 // Make sure we have a path to the file
                 dbFile.getParentFile().mkdirs();
 

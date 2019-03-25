@@ -333,8 +333,28 @@ public class ExploreFragment extends Fragment {
             }
         });
 
-        //createModel();
+        mModel = mViewModel.getAllLocationsWithCategories().getValue();
+
+        // The adapter
+        mAdapter = new LocationAdapter(mModel);
+        mAdapter.setOnLocationItemListener(new LocationAdapter.OnLocationItemListener() {
+            @Override
+            public void onLocationItemClicked(LocationDAO.LocationWithCategory loc, int position) {
+
+
+
+
+                //TODO: call the proper fragment
+
+
+
+
+            }
+        });
+
+
         //setHasOptionsMenu(true);
+        setRetainInstance(true);
     }
 
     /*
@@ -361,42 +381,16 @@ public class ExploreFragment extends Fragment {
   }
     */
 
+    /*
     @Override
     public void onActivityCreated(Bundle savedInstance){
         super.onActivityCreated(savedInstance);
         setRetainInstance(true);
 
-        final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        layoutManager.setOrientation(RecyclerView.VERTICAL);
-
-        if(savedInstance == null) {
-            layoutManager.scrollToPosition(0);
-        }
-
-        mRecyclerView.setLayoutManager(layoutManager);
-
-
-        // The adapter
-        mAdapter = new LocationAdapter(mModel);
-        mAdapter.setOnLocationItemListener(new LocationAdapter.OnLocationItemListener() {
-            @Override
-            public void onLocationItemClicked(LocationDAO.LocationWithCategory loc, int position) {
-
-
-
-
-                //TODO: call the proper fragment
-
-
-
-
-            }
-        });
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setHasFixedSize(true);
 
 
     }
+    */
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -405,15 +399,28 @@ public class ExploreFragment extends Fragment {
         View layout = inflater.inflate(R.layout.fragment_main, container, false);
 
         mRecyclerView = ViewUtility.findViewById(layout, R.id.main_recycler_view);
+
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setOrientation(RecyclerView.VERTICAL);
+
+        if(savedInstanceState == null) {
+            layoutManager.scrollToPosition(0);
+        }
+
+        mRecyclerView.setLayoutManager(layoutManager);
+
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setHasFixedSize(true);
+
+        setRetainInstance(true);
+
         return layout;
     }
 
-    /**
-     * Utility method that creates the LocationModel
-     */
-    private void createModel() {
-        mModel.clear();
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        mAdapter.notifyDataSetChanged();
     }
 
     /*
