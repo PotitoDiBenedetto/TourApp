@@ -7,10 +7,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.dibenedetto.potito.tourapp.db.TourAppRoomDatabase;
-import com.dibenedetto.potito.tourapp.fragments.AllLocationsFragment;
 import com.dibenedetto.potito.tourapp.fragments.HomeFragment;
 import com.dibenedetto.potito.tourapp.fragments.SettingsFragment;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -23,7 +21,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
-public class ExploreActivity extends AppCompatActivity
+public class off_HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     //this app db reference
@@ -93,7 +91,7 @@ public class ExploreActivity extends AppCompatActivity
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        // showing the home fragment
+        // for changing the fragment
         if (savedInstanceState == null) {
 /*
             final Intent intent = getIntent();
@@ -105,34 +103,18 @@ public class ExploreActivity extends AppCompatActivity
                         .add(R.id.anchor_point, mainFragment, "")
                         //.addToBackStack(null)
                         .commit();
+            } /* else {
+                //recupera l'action dell'intent e carica il fragment idoneo
+            }
         }
 
-        respondToIntent(getIntent().getIntExtra("fragmentToOpen", 0));
+        /*
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.anchor_point, nextFragment)
+                .commit();
+         */
 
-        ExploreActivity.db = TourAppRoomDatabase.getDatabase(getApplicationContext(), DB_NAME);
-
-    }
-
-    private void respondToIntent(int fragmentCode) {
-
-        final Fragment nextFragment;
-
-        switch(fragmentCode) {
-            case 0:
-                break;
-            case 1:
-                nextFragment = new SettingsFragment();
-                nextFragment.setRetainInstance(true);
-
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.anchor_point, nextFragment)
-                        .addToBackStack(null)
-                        .commit();
-                break;
-            default:
-                break;
-        }
-
+    off_HomeActivity.db = TourAppRoomDatabase.getDatabase(getApplicationContext(), DB_NAME);
 
     }
 
@@ -185,6 +167,7 @@ public class ExploreActivity extends AppCompatActivity
             case R.id.nav_settings:
                 nextFragment = new SettingsFragment();
                 nextFragment.setRetainInstance(true);
+
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.anchor_point, nextFragment)
                         .addToBackStack(null)
@@ -217,6 +200,7 @@ public class ExploreActivity extends AppCompatActivity
                 return true;//delete this!
         }
 
+
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -243,7 +227,6 @@ public class ExploreActivity extends AppCompatActivity
                 Intent intent = new Intent(this, TabbedExploreActivity.class);
                 startActivity(intent);
                 finish();
-
                 break;/*
             case R.id.nav_diaires:
                 //nextFragment = new DiariesFragment();

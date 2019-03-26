@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".Template_MainActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/new_primaryColor"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+        </androidx.appcompat.widget.Toolbar>
+
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/new_primaryColor"
+            android:visibility="visible"
+            app:layout_scrollFlags="scroll"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@color/blue_cippy_light"
+            app:tabIndicatorGravity="stretch">
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tabAllSelected"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/ic_playlist_add_check_white_48dp" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tabResturants"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/ic_restaurant_white_48dp" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tabHotels"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/ic_hotel_white_48dp" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/taLocations"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/ic_directions_walk_white_48dp" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tabInfopoints"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/ic_info_black_24dp" />
+
+        </com.google.android.material.tabs.TabLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+        <include layout="@layout/explore_content_main"/>
+
+
+    <!--
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@android:drawable/ic_dialog_email" />
+    -->
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

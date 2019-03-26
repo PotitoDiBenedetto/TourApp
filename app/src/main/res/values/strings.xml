@@ -92,4 +92,11 @@
     <string name="coupons_label">Coupons</string>
     <string name="diaries_label">Diaries</string>
     <string name="settings_label">Settings</string>
+    <string name="resturant_label">Resturants</string>
+    <string name="hotel_label">Hotels</string>
+    <string name="locations_label">Locations of interest</string>
+    <string name="infopoint_label">Infopints</string>
+    <string name="all_selected_label">All</string>
+    <string name="preferences_label">Preferences</string>
+    <string name="quick_links">Quick links</string>
 </resources>

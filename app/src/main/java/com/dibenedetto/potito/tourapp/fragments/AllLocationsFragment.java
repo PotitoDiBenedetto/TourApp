@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.dibenedetto.potito.tourapp.R;
 import com.dibenedetto.potito.tourapp.ViewModels.LocationsViewModel;
-import com.dibenedetto.potito.tourapp.db.Location;
 import com.dibenedetto.potito.tourapp.db.LocationDAO;
 
 import androidx.annotation.NonNull;
@@ -19,7 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 //import androidx.appcompat.app.AppCompatActivity;
@@ -30,7 +28,7 @@ import java.lang.ref.WeakReference;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ExploreFragment extends Fragment {
+public class AllLocationsFragment extends Fragment {
 
     /**
      *
@@ -118,7 +116,7 @@ public class ExploreFragment extends Fragment {
 
 
             // We register the listener for the onClick
-            itemView.setOnClickListener(ExploreFragment.ItemViewHolder.this);
+            itemView.setOnClickListener(AllLocationsFragment.ItemViewHolder.this);
         }
 
         /**
@@ -251,7 +249,7 @@ public class ExploreFragment extends Fragment {
             } else {
                 itemViewHolder.bindEmpty();
             }
-                itemViewHolder.setOnItemClickListener(ExploreFragment.LocationAdapter.this);
+                itemViewHolder.setOnItemClickListener(AllLocationsFragment.LocationAdapter.this);
 
         }
 
@@ -283,14 +281,14 @@ public class ExploreFragment extends Fragment {
      * static factory method
      * @return
      */
-    public static ExploreFragment newInstance() {
-        return new ExploreFragment();
+    public static AllLocationsFragment newInstance() {
+        return new AllLocationsFragment();
     }
 
     /**
      * default constructor
      */
-    public ExploreFragment() {}
+    public AllLocationsFragment() {}
 
     /**
      *
@@ -386,8 +384,8 @@ public class ExploreFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstance){
         super.onActivityCreated(savedInstance);
 
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         setRetainInstance(true);
 
@@ -400,7 +398,7 @@ public class ExploreFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        View layout = inflater.inflate(R.layout.fragment_main, container, false);
+        View layout = inflater.inflate(R.layout.fragment_explore, container, false);
 
         mRecyclerView = ViewUtility.findViewById(layout, R.id.main_recycler_view);
 

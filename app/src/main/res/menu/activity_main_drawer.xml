@@ -5,6 +5,10 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home_black_24dp"
+            android:title="Home" />
+        <item
             android:id="@+id/nav_diaires"
             android:icon="@drawable/ic_photo_album_black_24dp"
             android:title="@string/title_diaries" />
@@ -18,7 +22,7 @@
             android:title="@string/title_explore" />
     </group>
 
-    <item android:title="">
+    <item android:title="@string/quick_links">
         <menu>
             <item
                 android:id="@+id/nav_photo"
@@ -31,17 +35,13 @@
         </menu>
     </item>
 
-    <item android:title="">
+    <item android:title="@string/preferences_label" android:checkableBehavior="single">
         <menu>
-            <item android:title=""></item>
-        </menu>
-    </item>
-
-    <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings_black_24dp"
             android:title="@string/title_settings" />
-    </group>
+        </menu>
+    </item>
 
 </menu>

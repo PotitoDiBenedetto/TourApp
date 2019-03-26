@@ -11,7 +11,9 @@ import com.dibenedetto.potito.tourapp.ExploreActivity;
 import com.dibenedetto.potito.tourapp.R;
 import com.dibenedetto.potito.tourapp.util.ViewUtility;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
