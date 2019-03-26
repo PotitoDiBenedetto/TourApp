@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -21,7 +22,7 @@
 
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/card_view_explore"
+            android:id="@+id/card_home_explore"
             android:layout_width="240dp"
             android:layout_height="96dp"
             android:layout_margin="16dp"
@@ -32,22 +33,26 @@
             app:layout_constraintBottom_toTopOf="@+id/card_diaries"
             app:layout_constraintEnd_toStartOf="@+id/card_coupons"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            android:clickable="true"
+            android:focusable="true"
+           >
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/home_explore"
+                android:id="@+id/home_explore_constraint"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/cippy_bianco"
-                android:clickable="true"
-                android:focusable="true"
-                android:onClick="onHomeCardClicked">
+
+                >
 
                 <LinearLayout
+                    android:id="@+id/home_explore"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    app:layout_constraintStart_toStartOf="parent">
+                    app:layout_constraintStart_toStartOf="parent"
+                   >
 
                     <ImageView
                         android:id="@+id/image_view_explore"
@@ -92,7 +97,7 @@
             app:cardElevation="@dimen/nav_header_vertical_spacing"
             app:layout_constraintBottom_toTopOf="@+id/cardview_settings"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/card_view_explore"
+            app:layout_constraintStart_toEndOf="@+id/card_home_explore"
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -154,7 +159,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/cardview_settings"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/card_view_explore">
+            app:layout_constraintTop_toBottomOf="@+id/card_home_explore">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

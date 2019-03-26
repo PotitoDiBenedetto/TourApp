@@ -12,10 +12,10 @@ import com.dibenedetto.potito.tourapp.R;
 import com.dibenedetto.potito.tourapp.ViewModels.LocationsViewModel;
 import com.dibenedetto.potito.tourapp.db.Location;
 import com.dibenedetto.potito.tourapp.db.LocationDAO;
-import com.dibenedetto.potito.tourapp.model.CategoryItem;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -381,16 +381,20 @@ public class ExploreFragment extends Fragment {
   }
     */
 
-    /*
+
     @Override
     public void onActivityCreated(Bundle savedInstance){
         super.onActivityCreated(savedInstance);
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         setRetainInstance(true);
 
 
 
     }
-    */
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,

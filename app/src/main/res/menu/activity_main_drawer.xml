@@ -16,10 +16,6 @@
             android:id="@+id/nav_explore"
             android:icon="@drawable/ic_explore_black_24dp"
             android:title="@string/title_explore" />
-        <item
-            android:id="@+id/nav_settings"
-            android:icon="@drawable/ic_settings_black_24dp"
-            android:title="@string/title_settings" />
     </group>
 
     <item android:title="">
@@ -34,5 +30,18 @@
                 android:title="@string/title_map" />
         </menu>
     </item>
+
+    <item android:title="">
+        <menu>
+            <item android:title=""></item>
+        </menu>
+    </item>
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="@string/title_settings" />
+    </group>
 
 </menu>

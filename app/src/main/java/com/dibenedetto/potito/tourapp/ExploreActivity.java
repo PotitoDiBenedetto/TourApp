@@ -216,7 +216,7 @@ public class ExploreActivity extends AppCompatActivity
                 nextFragment = new SettingsFragment();
                 nextFragment.setRetainInstance(true);
                 break;
-            case R.id.home_explore:
+            case R.id.card_home_explore:
                 nextFragment = new ExploreFragment();
                 nextFragment.setRetainInstance(true);
                 break;/*
