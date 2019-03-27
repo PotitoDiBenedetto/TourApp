@@ -99,4 +99,6 @@
     <string name="all_selected_label">All</string>
     <string name="preferences_label">Preferences</string>
     <string name="quick_links">Quick links</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="target_position">Target Position</string>
 </resources>

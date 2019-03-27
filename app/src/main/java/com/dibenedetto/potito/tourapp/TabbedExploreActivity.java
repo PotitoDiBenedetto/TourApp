@@ -14,6 +14,7 @@ import com.dibenedetto.potito.tourapp.db.TourAppRoomDatabase;
 import com.dibenedetto.potito.tourapp.fragments.AllLocationsFragment;
 import com.dibenedetto.potito.tourapp.fragments.HomeFragment;
 import com.dibenedetto.potito.tourapp.fragments.SettingsFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -24,6 +25,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NavUtils;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -175,9 +177,12 @@ public class TabbedExploreActivity extends AppCompatActivity
             return;
         } else {
             super.onBackPressed();
+            NavUtils.navigateUpFromSameTask(this);
+            /*
             final Intent intent = new Intent(this, ExploreActivity.class);
             startActivity(intent);
             finish();
+            */
         }
 
     }
@@ -210,12 +215,16 @@ public class TabbedExploreActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         final int id = item.getItemId();
         final Fragment nextFragment;
+        final Intent intent;
 
         switch(id) {
             case R.id.nav_settings:
-               final Intent intent = new Intent(this, ExploreActivity.class);
+               intent = new Intent(this, ExploreActivity.class);
                intent.putExtra("fragmentToOpen",1);
                startActivity(intent);
+                break;
+            case R.id.nav_home:
+                NavUtils.navigateUpFromSameTask(this);
                 break;
             case R.id.nav_explore:
                 // this page
@@ -231,11 +240,11 @@ public class TabbedExploreActivity extends AppCompatActivity
             case R.id.nav_photo:
                 //nextFragment = new PhotoFragment();
                 //nextFragment.setRetainInstance(true);
-                break;
+                break;*/
             case R.id.nav_map:
-                //nextFragment = new MapFragment();
-                //nextFragment.setRetainInstance(true);
-                break; */
+                intent = new Intent(this, MapsActivity.class);
+                intent.putExtra("coordinates",new LatLng(-31,151));
+                startActivity(intent);
             default:
                 //throw new IllegalArgumentException("No Fragment for the given menu item");
                 drawer.closeDrawer(GravityCompat.START);//delete me !

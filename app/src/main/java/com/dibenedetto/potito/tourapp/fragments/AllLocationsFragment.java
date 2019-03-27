@@ -159,16 +159,16 @@ public class AllLocationsFragment extends Fragment {
             int id=0;
             switch(loc.categoriaPrimaria._id_categoria_primaria) {
                 case 1:
-                    id = R.mipmap.ic_resturants_round;
+                    id = R.mipmap.ic_resturant;
                     break;
                 case 2:
-                    id = R.mipmap.ic_hotel_round;
+                    id = R.mipmap.ic_hotels;
                     break;
                 case 3:
-                    id = R.mipmap.ic_locations_round;
+                    id = R.mipmap.ic_walks;
                     break;
                 case 4:
-                    id = R.mipmap.ic_infopoint_round;
+                    id = R.mipmap.ic_info;
                     break;
             }
             return id;

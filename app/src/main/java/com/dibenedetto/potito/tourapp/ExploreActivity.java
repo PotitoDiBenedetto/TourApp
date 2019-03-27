@@ -11,6 +11,7 @@ import com.dibenedetto.potito.tourapp.fragments.AllLocationsFragment;
 import com.dibenedetto.potito.tourapp.fragments.HomeFragment;
 import com.dibenedetto.potito.tourapp.fragments.SettingsFragment;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -180,6 +181,7 @@ public class ExploreActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         final int id = item.getItemId();
         final Fragment nextFragment;
+        final Intent intent;
 
         switch(id) {
             case R.id.nav_settings:
@@ -191,9 +193,17 @@ public class ExploreActivity extends AppCompatActivity
                         .commit();
                 break;
             case R.id.nav_explore:
-                Intent intent = new Intent(this, TabbedExploreActivity.class);
+                intent = new Intent(this, TabbedExploreActivity.class);
                 startActivity(intent);
                 finish();
+                break;
+            case R.id.nav_home:
+                nextFragment = HomeFragment.newInstance();
+                nextFragment.setRetainInstance(true);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.anchor_point, nextFragment, "")
+                        //.addToBackStack(null)
+                        .commit();
                 break;/*
             case R.id.nav_diaires:
                 //nextFragment = new DiariesFragment();
@@ -206,11 +216,13 @@ public class ExploreActivity extends AppCompatActivity
             case R.id.nav_photo:
                 //nextFragment = new PhotoFragment();
                 //nextFragment.setRetainInstance(true);
-                break;
+                break;*/
             case R.id.nav_map:
-                //nextFragment = new MapFragment();
-                //nextFragment.setRetainInstance(true);
-                break; */
+                intent = new Intent(this, MapsActivity.class);
+                intent.putExtra("coordinates",new LatLng(-31,151));
+                startActivity(intent);
+
+                break;
             default:
                 //throw new IllegalArgumentException("No Fragment for the given menu item");
                 drawer.closeDrawer(GravityCompat.START);//delete me !
@@ -230,6 +242,7 @@ public class ExploreActivity extends AppCompatActivity
         final Fragment nextFragment;
 
         switch (id) {
+            /*
             case R.id.home_settings:
                 nextFragment = new SettingsFragment();
                 nextFragment.setRetainInstance(true);
@@ -238,13 +251,13 @@ public class ExploreActivity extends AppCompatActivity
                         .replace(R.id.anchor_point, nextFragment)
                         .addToBackStack(null)
                         .commit();
-                break;
+                break;*/
             case R.id.card_home_explore:
                 Intent intent = new Intent(this, TabbedExploreActivity.class);
                 startActivity(intent);
-                finish();
 
-                break;/*
+                break;
+                /*
             case R.id.nav_diaires:
                 //nextFragment = new DiariesFragment();
                 //nextFragment.setRetainInstance(true);
@@ -253,14 +266,7 @@ public class ExploreActivity extends AppCompatActivity
                 //nextFragment = new CouponsFragment();
                 //nextFragment.setRetainInstance(true);
                 break;
-            case R.id.nav_photo:
-                //nextFragment = new PhotoFragment();
-                //nextFragment.setRetainInstance(true);
-                break;
-            case R.id.nav_map:
-                //nextFragment = new MapFragment();
-                //nextFragment.setRetainInstance(true);
-                break; */
+          */
             default:
                 //throw new IllegalArgumentException("No Fragment for the given menu item");
                 Snackbar.make(view, "Replace with your own action - Explore", Snackbar.LENGTH_LONG)
