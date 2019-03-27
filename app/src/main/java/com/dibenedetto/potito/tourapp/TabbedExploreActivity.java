@@ -2,18 +2,11 @@ package com.dibenedetto.potito.tourapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.dibenedetto.potito.tourapp.R;
-import com.dibenedetto.potito.tourapp.db.TourAppRoomDatabase;
 import com.dibenedetto.potito.tourapp.fragments.AllLocationsFragment;
-import com.dibenedetto.potito.tourapp.fragments.HomeFragment;
-import com.dibenedetto.potito.tourapp.fragments.SettingsFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
@@ -21,7 +14,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -52,6 +44,7 @@ public class TabbedExploreActivity extends AppCompatActivity
      */
     private DrawerLayout drawer;
 
+
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -77,6 +70,8 @@ public class TabbedExploreActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        navigationView.setCheckedItem(R.id.nav_explore);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -140,8 +135,8 @@ public class TabbedExploreActivity extends AppCompatActivity
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-            //todo: remove
             View view = findViewById(R.id.container);
+            final Intent intent;
 
             switch (item.getItemId()) {
                 case R.id.navigation_coupons:
@@ -149,16 +144,22 @@ public class TabbedExploreActivity extends AppCompatActivity
                     Snackbar.make(view, "Replace with your own action - Coupons", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                     return true;
+
                 case R.id.navigation_photo:
                     //todo: open diaries activity
                     Snackbar.make(view, "Replace with your own action - Diaries", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                     return true;
+
                 case R.id.navigation_map:
                     //todo: open explore activity
-                    Snackbar.make(view, "Replace with your own action - Explore", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                    intent = new Intent(TabbedExploreActivity.this, MapsActivity.class);
+                    intent.putExtra("coordinates",new LatLng(-31,151));
+                    startActivity(intent);
                     return true;
+
+
+
             }
             return false;
         }
@@ -179,7 +180,7 @@ public class TabbedExploreActivity extends AppCompatActivity
             super.onBackPressed();
             NavUtils.navigateUpFromSameTask(this);
             /*
-            final Intent intent = new Intent(this, ExploreActivity.class);
+            final Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
             */
@@ -199,13 +200,17 @@ public class TabbedExploreActivity extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        final int id = item.getItemId();
+        final Fragment nextFragment;
+        final Intent intent;
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            intent = new Intent(this, MainActivity.class);
+            intent.putExtra("fragmentToOpen",1);
+            startActivity(intent);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -219,7 +224,7 @@ public class TabbedExploreActivity extends AppCompatActivity
 
         switch(id) {
             case R.id.nav_settings:
-               intent = new Intent(this, ExploreActivity.class);
+               intent = new Intent(this, MainActivity.class);
                intent.putExtra("fragmentToOpen",1);
                startActivity(intent);
                 break;

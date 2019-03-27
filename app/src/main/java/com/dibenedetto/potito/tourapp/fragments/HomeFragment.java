@@ -1,19 +1,13 @@
 package com.dibenedetto.potito.tourapp.fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.dibenedetto.potito.tourapp.ExploreActivity;
+import com.dibenedetto.potito.tourapp.MainActivity;
 import com.dibenedetto.potito.tourapp.R;
-import com.dibenedetto.potito.tourapp.util.ViewUtility;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.tabs.TabLayout;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
@@ -77,7 +71,7 @@ public class HomeFragment extends Fragment {
         card.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                ((ExploreActivity)getActivity()).onHomeCardClicked(v);
+                ((MainActivity)getActivity()).onHomeCardClicked(v);
             }
         });
     }

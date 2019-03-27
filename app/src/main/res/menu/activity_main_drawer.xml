@@ -35,13 +35,15 @@
         </menu>
     </item>
 
-    <item android:title="@string/preferences_label" android:checkableBehavior="single">
+    <item android:title="@string/preferences_label" >
         <menu>
+        <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings_black_24dp"
             android:title="@string/title_settings" />
-        </menu>
+        </group>
+    </menu>
     </item>
 
 </menu>

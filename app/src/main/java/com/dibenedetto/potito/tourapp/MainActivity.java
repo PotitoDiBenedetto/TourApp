@@ -7,7 +7,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.dibenedetto.potito.tourapp.db.TourAppRoomDatabase;
-import com.dibenedetto.potito.tourapp.fragments.AllLocationsFragment;
 import com.dibenedetto.potito.tourapp.fragments.HomeFragment;
 import com.dibenedetto.potito.tourapp.fragments.SettingsFragment;
 
@@ -24,13 +23,23 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
-public class ExploreActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     //this app db reference
     public static TourAppRoomDatabase db;
 
     public static final String DB_NAME = "TourApp.db";
+
+    /*
+     * drawer layout
+     */
+    private DrawerLayout drawer;
+
+    /*
+     * navigationView
+     */
+    private NavigationView navigationView;
 
     /*
      * attribute listener for bottom navigation bar
@@ -43,6 +52,7 @@ public class ExploreActivity extends AppCompatActivity
 
             //todo: remove
             View view = findViewById(R.id.container);
+            final Intent intent;
 
             switch (item.getItemId()) {
                 case R.id.navigation_coupons:
@@ -57,19 +67,14 @@ public class ExploreActivity extends AppCompatActivity
                     return true;
                 case R.id.navigation_map:
                     //todo: open explore activity
-                    Snackbar.make(view, "Replace with your own action - Explore", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                    intent = new Intent(MainActivity.this, MapsActivity.class);
+                    intent.putExtra("coordinates",new LatLng(-31,151));
+                    startActivity(intent);
                     return true;
             }
             return false;
         }
     };
-
-
-    /*
-     * drawer layout
-     */
-    private DrawerLayout drawer;
 
 
     @Override
@@ -88,18 +93,18 @@ public class ExploreActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        navigationView.setCheckedItem(R.id.nav_home);
+
         // showing the home fragment
         if (savedInstanceState == null) {
-/*
-            final Intent intent = getIntent();
-            if (intent == null) { */
-                //final Fragment mainFragment = new Fragment();
+
+
                 final HomeFragment mainFragment = HomeFragment.newInstance();
                 mainFragment.setRetainInstance(true);
                 getSupportFragmentManager().beginTransaction()
@@ -110,7 +115,7 @@ public class ExploreActivity extends AppCompatActivity
 
         respondToIntent(getIntent().getIntExtra("fragmentToOpen", 0));
 
-        ExploreActivity.db = TourAppRoomDatabase.getDatabase(getApplicationContext(), DB_NAME);
+        MainActivity.db = TourAppRoomDatabase.getDatabase(getApplicationContext(), DB_NAME);
 
     }
 
@@ -124,6 +129,8 @@ public class ExploreActivity extends AppCompatActivity
             case 1:
                 nextFragment = new SettingsFragment();
                 nextFragment.setRetainInstance(true);
+
+                navigationView.setCheckedItem(R.id.nav_settings);
 
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.anchor_point, nextFragment)
@@ -165,10 +172,20 @@ public class ExploreActivity extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        final int id = item.getItemId();
+        final Fragment nextFragment;
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            nextFragment = new SettingsFragment();
+            nextFragment.setRetainInstance(true);
+
+            navigationView.setCheckedItem(R.id.nav_settings);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.anchor_point, nextFragment)
+                    .addToBackStack(null)
+                    .commit();
             return true;
         }
 
@@ -187,6 +204,7 @@ public class ExploreActivity extends AppCompatActivity
             case R.id.nav_settings:
                 nextFragment = new SettingsFragment();
                 nextFragment.setRetainInstance(true);
+                navigationView.setCheckedItem(R.id.nav_settings);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.anchor_point, nextFragment)
                         .addToBackStack(null)
@@ -200,6 +218,7 @@ public class ExploreActivity extends AppCompatActivity
             case R.id.nav_home:
                 nextFragment = HomeFragment.newInstance();
                 nextFragment.setRetainInstance(true);
+                navigationView.setCheckedItem(R.id.nav_explore);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.anchor_point, nextFragment, "")
                         //.addToBackStack(null)

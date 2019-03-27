@@ -36,17 +36,17 @@
             android:label="@string/title_activity_maps">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.dibenedetto.potito.tourapp.ExploreActivity" />
+                android:value="com.dibenedetto.potito.tourapp.MainActivity" />
         </activity>
         <activity
             android:name=".TabbedExploreActivity"
             android:label="@string/explore_label">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.dibenedetto.potito.tourapp.ExploreActivity" />
+                android:value="com.dibenedetto.potito.tourapp.MainActivity" />
         </activity>
         <activity
-            android:name=".ExploreActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/SplashTheme">
             <intent-filter>
