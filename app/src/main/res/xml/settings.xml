@@ -19,8 +19,9 @@
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/optional_services_title">
-        <CheckBoxPreference
-            android:key="broadcast_message"
+        <SwitchPreference
+            android:key="UPDATE_DB"
+            android:defaultValue="false"
             android:summary="@string/summary_broadcast_message"
             android:title="@string/title_broadcast_message"/>
     </PreferenceCategory>

@@ -101,4 +101,12 @@
     <string name="quick_links">Quick links</string>
     <string name="title_activity_maps">Map</string>
     <string name="target_position">Target Position</string>
+    <string name="permission_reason_title">Needed Permission</string>
+    <string name="permission_reason_message">We need permission to use some of your device functionality in order to satisfy your needs.</string>
+    <string name="no_storage_permission_title">Permission Warning</string>
+    <string name="no_storage_permission_message">The Storage Permission is mandatory for the usage of this application</string>
+    <string name="permission_map_reason_title">Location Permission</string>
+    <string name="permission_map_reason_message">We need this permission to locate points of interest nearby</string>
+    <string name="no_location_permission_title">Permission Warning</string>
+    <string name="no_location_permission_message">The Location Permission is mandatory for the usage of this application</string>
 </resources>

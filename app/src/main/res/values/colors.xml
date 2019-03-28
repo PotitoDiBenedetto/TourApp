@@ -2,8 +2,13 @@
 <resources>
     <color name="exPrimaryColor">#008577</color>
     <color name="exPrimaryDark">#00574B</color>
+    <color name="lightRedCippy">#E74C3C</color>
     <color name="colorAccent">#FF5722</color>
     <color name="gray">#CCCCFF</color>
+    <color name="lightBlueCippy">#3498db</color>
+    <color name="lightYellowCippy">#F1C40F</color>
+    <color name="lightGreenCippy">#7AC943</color>
+    <color name="lightPurpleCippy">#9B59B6</color>
     <color name="colorPrimary">#2962ff</color>
     <color name="primaryLightColor">#768fff</color>
     <color name="colorPrimaryDark">#0039cb</color>
