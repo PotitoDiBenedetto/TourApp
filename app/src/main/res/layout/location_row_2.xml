@@ -34,20 +34,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:paddingStart="2dp"
                 android:textColor="@color/new_secondaryTextColor"
-                android:textSize="18sp"
+                android:textSize="22sp"
                 android:textStyle="bold"
-                tools:text="Nome Attività" />
-
-            <TextView
-                android:id="@+id/category"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="4dp"
-                android:text="Categoria"
-                android:textColor="@color/new_primaryDarkColor"
-                android:textSize="14sp" />
+                tools:text="SOUTHFIELDS" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -63,8 +53,8 @@
                     android:layout_weight="3"
                     android:gravity="center_vertical"
                     android:textColor="@color/blue_cippy"
-                    android:textSize="14sp"
-                    tools:text="Indirizzo" />
+                    android:textSize="20sp"
+                    tools:text="Piccadilly Circus" />
 
 
                 <TextView
@@ -75,7 +65,6 @@
                     android:gravity="end"
                     android:minWidth="20dp"
                     android:text="100m" />
-
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

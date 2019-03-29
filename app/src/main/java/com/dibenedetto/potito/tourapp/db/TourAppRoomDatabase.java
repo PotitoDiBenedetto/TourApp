@@ -2,9 +2,10 @@ package com.dibenedetto.potito.tourapp.db;
 
 
 import android.app.DownloadManager;
-import android.content.BroadcastReceiver;
+//import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
+//import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Log;
 
@@ -38,6 +39,8 @@ public abstract class TourAppRoomDatabase extends RoomDatabase {
 
     private static File downloadedFile;
 
+    private static final String IS_NOT_FIRST_RUN = "IS_NOT_FIRST_RUN";
+
     //check if DB have to be updated;
     public static boolean haveToUpdate(Context context) {
         return (getDefaultSharedPreferences(context)
@@ -45,10 +48,10 @@ public abstract class TourAppRoomDatabase extends RoomDatabase {
     }
 
     //download the updated DB and return the download-ID
-    public static long updateDatabase(final Context context, final String DB_NAME) {
+    public static long downloadDatabase(final Context context, final String DB_NAME) {
 
             downloadedFile = new File(context.getExternalFilesDir(null), "TempDB");
-            downloadedFile.getParentFile().mkdirs();
+            //downloadedFile.getParentFile().mkdirs();
 
             DownloadManager.Request request = new DownloadManager.Request(
                     Uri.parse(Const.REMOTE_DB_PATH + Const.REMOTE_DB_ID))
@@ -62,12 +65,16 @@ public abstract class TourAppRoomDatabase extends RoomDatabase {
     public static void replaceDownloadedDatabase(Context context, String DB_NAME) {
             //spostalo nella cartella di room
 
-        if (downloadedFile.getParentFile().mkdirs()) {
-
         final File dbFile = context.getDatabasePath(DB_NAME);
-           dbFile.getParentFile().mkdirs();
+        SharedPreferences pref = getDefaultSharedPreferences(context);
 
-           try {
+
+            // Make sure we have a path to the file
+            context.openOrCreateDatabase(DB_NAME, context.MODE_PRIVATE, null).close();
+            dbFile.getParentFile().mkdirs();
+
+
+            try {
                 final InputStream inputStream = new FileInputStream(downloadedFile);
                 final OutputStream output = new FileOutputStream(dbFile);
 
@@ -87,17 +94,19 @@ public abstract class TourAppRoomDatabase extends RoomDatabase {
                 e.printStackTrace();
             }
 
-            // instanceate
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putString(IS_NOT_FIRST_RUN, IS_NOT_FIRST_RUN);
+            editor.commit();
 
         synchronized (TourAppRoomDatabase.class) {
             if (INSTANCE == null) {
                 INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                         TourAppRoomDatabase.class, DB_NAME)
                         .build();
-                }
             }
         }
     }
+
 
 
 
@@ -106,9 +115,11 @@ public abstract class TourAppRoomDatabase extends RoomDatabase {
         if (INSTANCE == null) {
 
             final File dbFile = context.getDatabasePath(DB_NAME);
+            SharedPreferences pref = getDefaultSharedPreferences(context);
 
-            if(!dbFile.exists()) {
+            if(!dbFile.exists() || (!pref.contains(IS_NOT_FIRST_RUN))) {
                 // Make sure we have a path to the file
+                context.openOrCreateDatabase(DB_NAME, context.MODE_PRIVATE, null).close();
                 dbFile.getParentFile().mkdirs();
 
                 // Try to copy database file
@@ -132,6 +143,9 @@ public abstract class TourAppRoomDatabase extends RoomDatabase {
                     e.printStackTrace();
                 }
 
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putString(IS_NOT_FIRST_RUN, IS_NOT_FIRST_RUN);
+                editor.commit();
             }
 
             synchronized (TourAppRoomDatabase.class) {

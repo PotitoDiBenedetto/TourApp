@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "b8dc763adacd54f69a70c41845754cbc",
+    "identityHash": "1e45bf11a0e115f58b5561e059410e16",
     "entities": [
       {
         "tableName": "Diari",
@@ -117,7 +117,7 @@
       },
       {
         "tableName": "Location",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id_location` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, `nome_location` TEXT, `indirizzo` TEXT, `orari` TEXT, `costo` INTEGER NOT NULL, `categoria` INTEGER NOT NULL, FOREIGN KEY(`categoria`) REFERENCES `Categoria_secondaria`(`_id_categoria_secondaria`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id_location` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, `nome_location` TEXT, `indirizzo` TEXT, `orari` TEXT, `costo` INTEGER NOT NULL, `categoria` INTEGER NOT NULL, `telefono` INTEGER NOT NULL, `dettaglio` TEXT, `web_url` TEXT, `img_url` TEXT, `email` TEXT, FOREIGN KEY(`categoria`) REFERENCES `Categoria_secondaria`(`_id_categoria_secondaria`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "_id_location",
@@ -166,6 +166,36 @@
             "columnName": "categoria",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "telefono",
+            "columnName": "telefono",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dettaglio",
+            "columnName": "dettaglio",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "web_url",
+            "columnName": "web_url",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "img_url",
+            "columnName": "img_url",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "email",
+            "columnName": "email",
+            "affinity": "TEXT",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -350,7 +380,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"b8dc763adacd54f69a70c41845754cbc\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"1e45bf11a0e115f58b5561e059410e16\")"
     ]
   }
 }

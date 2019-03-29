@@ -34,5 +34,20 @@ public class Location {
     @ColumnInfo
     public int categoria;
 
+    @ColumnInfo
+    public int telefono;
+
+    @ColumnInfo
+    public String dettaglio;
+
+    @ColumnInfo
+    public String web_url;
+
+    @ColumnInfo
+    public String img_url;
+
+    @ColumnInfo
+    public String email;
+
     Location(){}
 }

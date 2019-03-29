@@ -1,4 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">TourApp</string>
+    <string name="navigation_drawer_open">Apri il menu laterale</string>
+    <string name="navigation_drawer_close">Chiudi il meu laterale</string>
+    <string name="nav_header_title">Potito Di Benedetto - m621784</string>
+    <string name="nav_header_subtitle">potito.dibenedetto@gmail.com</string>
+    <string name="nav_header_desc">Intestazione Menu</string>
+    <string name="action_settings">Impostazioni</string>
+    <string name="title_diaries">Foto Diari</string>
+    <string name="title_coupons">Coupons</string>
+    <string name="title_explore">Esplora</string>
+    <string name="title_settings">Impostazioni</string>
+    <string name="title_photo">Nuova Foto</string>
+    <string name="title_map">Maps</string>
+    <string name="title_activity_settings">Settings</string>
 
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">Generali</string>
+
+
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Data &amp; sync</string>
+
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string-array name="list_preference_entries">
+        <item>Entry 1</item>
+        <item>Entry 2</item>
+        <item>Entry 3</item>
+    </string-array>
+
+    <string-array name="list_preference_entry_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="multi_select_list_preference_default_value" />
+
+    <string name="pref_title_system_sync_settings">System sync settings</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+
+    <string name="pref_title_new_message_notifications">New message notifications</string>
+
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_title_vibrate">Vibrate</string>
+
+    <string name="explore_label">Esplora</string>
+    <string name="coupons_label">Coupons</string>
+    <string name="diaries_label">Diari</string>
+    <string name="settings_label">Impostazioni</string>
+    <string name="resturant_label">Ristoranti</string>
+    <string name="hotel_label">Hotels</string>
+    <string name="locations_label">Luoghi di interesse</string>
+    <string name="infopoint_label">Infopoints</string>
+    <string name="all_selected_label">Tutti</string>
+    <string name="preferences_label">Preferenze</string>
+    <string name="quick_links">Scelte rapide</string>
+    <string name="title_activity_maps">Maps</string>
+    <string name="target_position">Target</string>
+    <string name="permission_reason_title">Permessi Richiesti</string>
+    <string name="permission_reason_message">E\' necessario concedere i permessi di scrittura/lettura dati sul dispositivo per poter usufruire delle funzionalità di questa applicazione</string>
+    <string name="no_storage_permission_title">Problema con i Permessi</string>
+    <string name="no_storage_permission_message">I permessi di memorizzazione sono indispensabili per poter usare questa applicazione. L\'applicazione verrà terminata</string>
+    <string name="permission_map_reason_title">Permessi di Geolocalizzazione</string>
+    <string name="permission_map_reason_message">E\' necessario concedere i permessi di geolocalizzazione per poter mostrare i punti di interesse nlle vicinanze</string>
+    <string name="no_location_permission_title">Problema con i Permessi</string>
+    <string name="no_location_permission_message">I permessi di geolocalizzazione sono indispensabili per poter usare questa funzionalità. L\'applicazione verrà terminata</string>
+
+    <!-- settings-->
+    <string name="optional_services_title">Impostazioni Opzionali</string>
+    <string name="summary_broadcast_message">Abilita download Database</string>
+    <string name="title_broadcast_message">Aggiornamento database</string>
+
+    <string name="config_data_title">Impostazioni Principali</string>
+    <string name="max_radius_title">Raggio di ricerca attività (m)</string>
+    <string name="max_radius_summary">Scegli il raggio di ricerca per punti di interesse nelle vicinanze</string>
+    <string name="max_result_number_title">Numero massimo di risultati</string>
+    <string name="max_result_number_summary">Seleziona il numero massimo di risultati in una pagina di ricerca</string>
 </resources>

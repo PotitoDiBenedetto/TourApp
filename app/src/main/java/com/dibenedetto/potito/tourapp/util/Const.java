@@ -6,7 +6,7 @@ public class Const {
     public static final String PERFS_NAME = "com.dibenedetto.potito.tourapp";
     public static final String DB_UPDATE_FLAG_KEY = "UPDATE_DB";
     public static final String REMOTE_DB_PATH = "https://docs.google.com/uc?export=download&id=";
-    public static final String REMOTE_DB_ID = "";
+    public static final String REMOTE_DB_ID = "1RCzf9_TYbRp9L7UcBMn4vWBcRDmHNGaP";
     /**
      * The id for the Location permission request
      */

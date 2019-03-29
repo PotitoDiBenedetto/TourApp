@@ -26,12 +26,15 @@ CREATE TABLE Location (
     _id_location INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
     latitude REAL NOT NULL,
     longitude REAL NOT NULL,
-    nome_location TEXT NOT NULL UNIQUE,
+    nome_location TEXT NOT NULL,
     indirizzo TEXT,
     orari TEXT,
     costo INTEGER,
     dettaglio TEXT,
-    url TEXT,
+    web_url TEXT,
+    img_url TEXT,
+    telefono INTEGER,
+    email TEXT,
     categoria INTEGER NOT NULL,
     FOREIGN KEY(categoria) REFERENCES Categoria_secondaria(_id_categoria_secondaria)
 );

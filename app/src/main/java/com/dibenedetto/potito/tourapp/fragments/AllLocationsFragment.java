@@ -86,6 +86,7 @@ public class AllLocationsFragment extends Fragment {
 
         private ImageView mImage;
         private TextView mText;
+        private TextView mCategory;
         private AddressTextView mAddress;
 
         private WeakReference<OnItemClickListener> mOnItemClickListenerRef;
@@ -113,6 +114,7 @@ public class AllLocationsFragment extends Fragment {
             mImage = ViewUtility.findViewById(itemView, R.id.category_icon);
             mText = ViewUtility.findViewById(itemView, R.id.location_name);
             mAddress = ViewUtility.findViewById(itemView, R.id.location_address_view);
+            mCategory = ViewUtility.findViewById(itemView, R.id.category);
 
 
             // We register the listener for the onClick
@@ -137,12 +139,14 @@ public class AllLocationsFragment extends Fragment {
             mImage.setImageResource(getCategoryIconId(loc));
             mText.setText(loc.location.nome_location);
             mAddress.setText(loc.location.indirizzo);
+            mCategory.setText(loc.categoriaSecondaria.nome_categoria_secondaria);
         }
 
         public void bindEmpty() {
             mImage.setImageResource(R.mipmap.ic_tourapp_round);
             mText.setText("loading");
             mAddress.setText("loading");
+            mCategory.setText("loading");
         }
 
         @Override

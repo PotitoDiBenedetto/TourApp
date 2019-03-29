@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity
                 case R.id.navigation_map:
                     //todo: open explore activity
                     intent = new Intent(MainActivity.this, MapsActivity.class);
-                    intent.putExtra("coordinates",new LatLng(-31,151));
+                    intent.putExtra("coordinates",new LatLng(41.1096154,16.8793305));
                     startActivity(intent);
                     return true;
             }
@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity
 
         if(TourAppRoomDatabase.haveToUpdate(context)) {
             registerReceiver(onDownloadComplete,new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
-            MainActivity.downloadID = TourAppRoomDatabase.updateDatabase(context, DB_NAME);
+            MainActivity.downloadID = TourAppRoomDatabase.downloadDatabase(context, DB_NAME);
         } else {
             MainActivity.db = TourAppRoomDatabase.getDatabase(getApplicationContext(), DB_NAME);
         }
@@ -248,13 +248,13 @@ public class MainActivity extends AppCompatActivity
             //Fetching the download id received with the broadcast
             long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
             //Checking if the received broadcast is for our enqueued download by matching download id
-            if (downloadID == id) {
-                if(TourAppRoomDatabase.haveToUpdate(context)) {
+            if (MainActivity.downloadID == id) {
+
                     //replace DB
                     TourAppRoomDatabase.replaceDownloadedDatabase(getApplicationContext(), DB_NAME);
                     //get istance
                     MainActivity.db = TourAppRoomDatabase.getDatabase(getApplicationContext(), DB_NAME);
-                    }
+
                 //unregister the broadcast receiver;
                 unregisterReceiver(onDownloadComplete);
             }

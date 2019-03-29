@@ -2,6 +2,7 @@ package com.dibenedetto.potito.tourapp.ViewModels;
 
 import android.app.Application;
 
+import com.dibenedetto.potito.tourapp.db.CategoriaSecondaria;
 import com.dibenedetto.potito.tourapp.db.Location;
 import com.dibenedetto.potito.tourapp.db.LocationDAO;
 import com.dibenedetto.potito.tourapp.db.LocationRepository;
@@ -20,11 +21,20 @@ public class LocationsViewModel extends AndroidViewModel {
     public LocationsViewModel (Application application) {
         super(application);
         mRepository = new LocationRepository(application);
-        mAllLocations = mRepository.getAllLocationsWithCategory();
     }
 
-    public LiveData<List<LocationDAO.LocationWithCategory>> getAllLocationsWithCategories() { return mAllLocations; }
+    public LiveData<List<LocationDAO.LocationWithCategory>> getAllLocationsWithCategories() {
+        return mRepository.getAllLocationsWithCategory();
+    }
+/*
+    public LiveData<List<CategoriaSecondaria>> getCategorieSecondarie(int CategriaPrimaria) {
+        return mRepository.getCategorieSecondarie();
+    }
 
-    public void insert(Location location) { mRepository.insert(location); }
+    public LiveData<List<LocationDAO.LocationWithCategory>> getLocationsOfCategories(int CategoriaSecondaria) {
+        return mRepository.getLocationsOfCategory(categoriaSecondaria);
+    }
+*/
+   public void insert(Location location) { mRepository.insert(location); }
 }
 
