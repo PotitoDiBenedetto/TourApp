@@ -35,45 +35,54 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:paddingStart="2dp"
+                android:paddingEnd="8dp"
                 android:textColor="@color/new_secondaryTextColor"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 tools:text="Nome Attività" />
 
-            <TextView
-                android:id="@+id/category"
-                android:layout_width="wrap_content"
+            <com.dibenedetto.potito.tourapp.ui.AddressTextView
+                android:id="@+id/location_address_view"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="4dp"
-                android:text="Categoria"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="8dp"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
                 android:textColor="@color/new_primaryDarkColor"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:textStyle="bold"
+                tools:text="Indirizzo" />
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-
-                <com.dibenedetto.potito.tourapp.ui.AddressTextView
-
-                    android:id="@+id/location_address_view"
+                <TextView
+                    android:id="@+id/category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
-                    android:gravity="center_vertical"
-                    android:textColor="@color/blue_cippy"
-                    android:textSize="14sp"
-                    tools:text="Indirizzo" />
-
+                    android:maxLines="1"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="8dp"
+                    android:text="Categoria"
+                    android:textColor="@color/blue_cippy_light"
+                    android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/distance_indicator"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/list_row_margin"
-                    android:layout_weight="1"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="8dp"
                     android:gravity="end"
-                    android:minWidth="20dp"
+                    android:maxWidth="60dp"
+                    android:maxLines="1"
+                    android:minWidth="40dp"
                     android:text="100m" />
 
             </LinearLayout>

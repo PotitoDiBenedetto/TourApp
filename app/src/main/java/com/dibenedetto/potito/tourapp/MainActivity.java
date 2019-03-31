@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     //this app db reference
-    public static TourAppRoomDatabase db;
+    private static TourAppRoomDatabase db;
 
     /*
      *

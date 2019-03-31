@@ -34,7 +34,7 @@ public interface LocationDAO {
      */
     @Query("SELECT * FROM Categoria_secondaria WHERE categoria_primaria = :categoriaPrimaria " +
             "ORDER BY nome_categoria_secondaria ASC")
-    LiveData<List<CategoriaSecondaria>> getCategrieSecondarie(int categoriaPrimaria);
+    LiveData<List<CategoriaSecondaria>> getCategrieSecondarieOf(int categoriaPrimaria);
 
 
     @Query("SELECT _id_categoria_secondaria FROM Categoria_secondaria WHERE nome_categoria_secondaria = :nome LIMIT 1")
@@ -70,7 +70,7 @@ public interface LocationDAO {
             "ON Location.categoria = Categoria_secondaria._id_categoria_secondaria INNER JOIN Categoria_primaria " +
             "ON Categoria_secondaria.categoria_primaria = Categoria_primaria._id_categoria_primaria " +
             "WHERE Categoria_secondaria._id_categoria_secondaria = :categoriaSecondaria ORDER BY Location.nome_location ASC")
-    LiveData<List<LocationWithCategory>> getLocationsOfCategory(int categoriaSecondaria);
+    LiveData<List<LocationWithCategory>> getLocationsOfSubCategory(int categoriaSecondaria);
 
     /**
      * restituisce tutte le locations appartenenti ala categoria secondaria fornita come parametro

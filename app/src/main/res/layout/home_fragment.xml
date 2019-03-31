@@ -71,12 +71,13 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_coupons"
-        style="@style/Base.CardView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:background="@color/new_primaryLightColor"
 
+        android:clickable="true"
+        android:focusable="auto"
         app:cardCornerRadius="4dp"
         app:cardElevation="@dimen/nav_header_vertical_spacing"
         app:layout_constraintBottom_toTopOf="@+id/cardview_settings"
@@ -126,6 +127,8 @@
         android:layout_margin="8dp"
         android:background="@color/new_primaryLightColor"
 
+        android:clickable="true"
+        android:focusable="auto"
         app:cardCornerRadius="4dp"
         app:cardElevation="@dimen/nav_header_vertical_spacing"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -184,8 +187,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/new_secondaryLightColor"
-            android:clickable="true"
-            android:focusable="true">
+            android:clickable="false">
 
             <ImageView
                 android:id="@+id/image_settings"
@@ -201,6 +203,7 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:text="@string/settings_label"
+                android:textAlignment="center"
                 android:textColor="@color/primaryTransparentLightColor"
                 android:textSize="18sp"
                 android:textStyle="bold"

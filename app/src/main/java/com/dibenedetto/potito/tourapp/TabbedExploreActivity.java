@@ -7,6 +7,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.dibenedetto.potito.tourapp.fragments.AllLocationsFragment;
+import com.dibenedetto.potito.tourapp.fragments.InterestsFragment;
+import com.dibenedetto.potito.tourapp.fragments.ResturantsFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
@@ -105,10 +107,35 @@ public class TabbedExploreActivity extends AppCompatActivity
 
         @Override
         public Fragment getItem(int position) {
+
             //TODO : return the right fragment in switch case
 
 
-            return new AllLocationsFragment();
+            switch(position) {
+                case 0:
+                    return new AllLocationsFragment();
+                    //break;
+                case 1:
+                    return new ResturantsFragment();
+                    //break;
+                /*
+                case 2:
+                    //hotels
+                    break; */
+                case 3:
+                    return new InterestsFragment();
+                    //break;
+                /*
+                case 4:
+                    //interests
+                    break; */
+                default :
+                    //error?
+                    return new AllLocationsFragment();
+                    //break;
+
+            }
+
         }
 
         @Override
