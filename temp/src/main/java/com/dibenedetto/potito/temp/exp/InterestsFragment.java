@@ -1,4 +1,4 @@
-package com.dibenedetto.potito.tourapp.fragments;
+package com.dibenedetto.potito.temp.exp;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,33 +10,34 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.dibenedetto.potito.tourapp.R;
-import com.dibenedetto.potito.tourapp.viewmodels.LocationsViewModel;
+import com.dibenedetto.potito.tourapp.db.CategoriaSecondaria;
 import com.dibenedetto.potito.tourapp.db.LocationDAO;
+import com.dibenedetto.potito.tourapp.ui.AddressTextView;
+import com.dibenedetto.potito.tourapp.util.ViewUtility;
+import com.dibenedetto.potito.tourapp.viewmodels.InterestsViewModel;
+
+import java.lang.ref.WeakReference;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 //import androidx.appcompat.app.AppCompatActivity;
-import com.dibenedetto.potito.tourapp.ui.AddressTextView;
-import com.dibenedetto.potito.tourapp.util.ViewUtility;
-import com.google.android.material.snackbar.Snackbar;
 
-import java.lang.ref.WeakReference;
-import java.util.LinkedList;
-import java.util.List;
-
-public class AllLocationsFragment extends Fragment {
+public class InterestsFragment extends Fragment {
 
     /**
      *
      */
-    private LocationsViewModel mViewModel;
+    private InterestsViewModel mViewModel;
 
     /**
      * The Reference of the OnCategoryItemSelectedListener if any
@@ -46,17 +47,19 @@ public class AllLocationsFragment extends Fragment {
     /**
      * The Category Model
      */
-    private List<LocationDAO.LocationWithCategory> mModel = new LinkedList<>();
+    //private List<LocationDAO.LocationWithCategory> mModel = new LinkedList<>();
 
     /**
      * The RecyclerView
      */
     private RecyclerView mRecyclerView;
 
+
     /**
-     * the adapter
+     * the adapter for the category
      */
-    private LocationAdapter mAdapter;
+    private CategoryAdapter mCategoryAdapter;
+
 
     /**
      * Number of columns for the grid layout
@@ -64,7 +67,7 @@ public class AllLocationsFragment extends Fragment {
     //private static final int COLS_NUMBER = 2;
 
     /**
-     * The Adapter for the CategoryItem model
+     * The Adapter for the locations model
      */
     private LocationAdapter mLocationAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -81,6 +84,25 @@ public class AllLocationsFragment extends Fragment {
          */
         void onLocationItemSelected(LocationDAO.LocationWithCategory locItem);
     }
+
+    /**
+     *
+     */
+    public interface OnCAtegoryItemSelectedListener {
+
+        /**
+         * Invoked when we select a catItem
+         *
+         * @param catItem The selected catItem
+         */
+        void onLocationItemSelected(CategoriaSecondaria catItem);
+    }
+
+
+    /*
+     ************** ViewHOlder and Adapter for the location items  ******************
+     */
+
 
     /**
      * This is the ViewHolder to manage item for the CategoryItem
@@ -134,7 +156,7 @@ public class AllLocationsFragment extends Fragment {
 
 
             // We register the listener for the onClick
-            itemView.setOnClickListener(AllLocationsFragment.ItemViewHolder.this);
+            itemView.setOnClickListener(InterestsFragment.ItemViewHolder.this);
         }
 
         /**
@@ -183,7 +205,20 @@ public class AllLocationsFragment extends Fragment {
             OnItemClickListener listener;
             if (mOnItemClickListenerRef != null && (listener = mOnItemClickListenerRef.get()) != null) {
 
-                listener.onItemClicked(getLayoutPosition());
+                //listener.onItemClicked(getLayoutPosition());
+
+                TableLayout tl = v.findViewById(R.id.tablelayout);
+                TextView address = v.findViewById(R.id.location_address_view);
+                View div = v.findViewById(R.id.divider);
+                if(tl.getVisibility() == View.GONE) {
+                    tl.setVisibility(View.VISIBLE);
+                    address.setMaxLines(3);
+                    div.setVisibility(View.VISIBLE);
+                } else {
+                    tl.setVisibility(View.GONE);
+                    address.setMaxLines(1);
+                    div.setVisibility(View.GONE);
+                }
             }
         }
 
@@ -266,10 +301,9 @@ public class AllLocationsFragment extends Fragment {
             // We inflate the data and return the related ViewHolder
 
             //for a single type of row
-      final View layout = LayoutInflater.from(viewGroup.getContext())
-              .inflate(R.layout.location_row_2, viewGroup, false);
-      return new ItemViewHolder(layout);
-
+            final View layout = LayoutInflater.from(viewGroup.getContext())
+                    .inflate(R.layout.location_row_2, viewGroup, false);
+            return new ItemViewHolder(layout);
 
         }
 
@@ -281,7 +315,7 @@ public class AllLocationsFragment extends Fragment {
             } else {
                 itemViewHolder.bindEmpty();
             }
-                itemViewHolder.setOnItemClickListener(AllLocationsFragment.LocationAdapter.this);
+            itemViewHolder.setOnItemClickListener(InterestsFragment.LocationAdapter.this);
 
         }
 
@@ -309,18 +343,228 @@ public class AllLocationsFragment extends Fragment {
     }
 
 
+
+
+    /*
+     **********************  ADAPTER AND VIEWHOLDER FOR THE SUBCATEGORIES  ******************************
+     */
+
+
+
+    /**
+     * This is the ViewHolder to manage item for the CategoryItem
+     */
+    public final static class CategoryViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
+
+        private ImageView mImage;
+        private TextView mText;
+
+        private WeakReference<OnItemClickListener> mOnItemClickListenerRef;
+
+        /**
+         * This is the interface to implement to listen to the click on the item
+         */
+        public interface OnItemClickListener {
+
+            /**
+             * Invoked when we select a category item
+             *
+             * @param position The selected position
+             */
+            void onItemClicked(int position);
+
+        }
+
+        /**
+         *
+         * @param itemView
+         */
+        public CategoryViewHolder(View itemView) {
+            super(itemView);
+            mImage = ViewUtility.findViewById(itemView, R.id.category_icon);
+            mText = ViewUtility.findViewById(itemView, R.id.category_name);
+
+
+            // We register the listener for the onClick
+            itemView.setOnClickListener(InterestsFragment.CategoryViewHolder.this);
+        }
+
+        /**
+         * We use this to register a specific OnItemClickListener
+         *
+         * @param onItemClickListener The OnItemClickListener
+         */
+        public void setOnItemClickListener(final OnItemClickListener onItemClickListener) {
+            this.mOnItemClickListenerRef = new WeakReference<OnItemClickListener>(onItemClickListener);
+        }
+
+        /**
+         * This binds the model to the View
+         *
+         * @param cat The model to map
+         */
+        public void bind(CategoriaSecondaria cat) {
+            mImage.setImageResource(getCategoryIconId(cat));
+            mText.setText(cat.nome_categoria_secondaria);
+
+        }
+
+        public void bindEmpty() {
+            mImage.setImageResource(R.mipmap.ic_tourapp_round);
+            mText.setText("loading");
+
+        }
+
+        @Override
+        public void onClick(View v) {
+
+            OnItemClickListener listener;
+            if (mOnItemClickListenerRef != null && (listener = mOnItemClickListenerRef.get()) != null) {
+
+                listener.onItemClicked(getLayoutPosition());
+            }
+        }
+
+        int getCategoryIconId(CategoriaSecondaria cat) {
+            int id=0;
+            switch(cat.categoria_primaria) {
+                case 1:
+                    id = R.mipmap.ic_resturant;
+                    break;
+                case 2:
+                    id = R.mipmap.ic_hotels;
+                    break;
+                case 3:
+                    id = R.mipmap.ic_walks;
+                    break;
+                case 4:
+                    id = R.mipmap.ic_info;
+                    break;
+            }
+            return id;
+        }
+
+    }
+
+    /**
+     * This is the Adapter that has the responsibility to access the model, create the ViewHolder
+     * and bind data
+     */
+    public final static class CategoryAdapter extends RecyclerView.Adapter<CategoryViewHolder>
+            implements CategoryViewHolder.OnItemClickListener {
+
+        /**
+         * The model for the Adapter
+         */
+        private List<CategoriaSecondaria> mModel;
+
+        /**
+         * The Reference to the Listener for CategoryItem selection
+         */
+        private WeakReference<OnCategoryItemListener> mOnCategoryItemListenerRef;
+
+        private OnCategoryItemListener mOnCategoryItemListener;
+
+        /**
+         * This is the interface to implement to listen to the click on the item
+         */
+        public interface OnCategoryItemListener {
+
+            /**
+             * Invoked when we select a Location item
+             *
+             * @param cat The selected LocationItem
+             * @param position The selected position
+             */
+            void onCategoryItemClicked(CategoriaSecondaria cat, int position);
+
+        }
+
+        /**
+         * Creates a LocationItemAdapter for the given model
+         *
+         * @param model The model for this Adapter
+         */
+        CategoryAdapter(final List<CategoriaSecondaria> model) {
+            this.mModel = model;
+        }
+
+        /**
+         * We use this to register a specific OnLocationItemListener
+         *
+         * @param onCategoryItemListener The OnLocationItemListener
+         */
+        public void setOnCategoryItemListener(final OnCategoryItemListener onCategoryItemListener) {
+            this.mOnCategoryItemListenerRef = new WeakReference<OnCategoryItemListener>(onCategoryItemListener);
+            this.mOnCategoryItemListener = onCategoryItemListener;
+        }
+
+        @Override
+        public CategoryViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+            // We inflate the data and return the related ViewHolder
+
+            //for a single type of row
+            final View layout = LayoutInflater.from(viewGroup.getContext())
+                    .inflate(R.layout.category_row_2, viewGroup, false);
+
+            return new CategoryViewHolder(layout);
+        }
+
+        @Override
+        public void onBindViewHolder(CategoryViewHolder categoryViewHolder, int position) {
+
+            if(mModel != null) {
+                categoryViewHolder.bind(mModel.get(position));
+            } else {
+                categoryViewHolder.bindEmpty();
+            }
+            categoryViewHolder.setOnItemClickListener(InterestsFragment.CategoryAdapter.this);
+
+        }
+
+        @Override
+        public int getItemCount() {
+
+            if (mModel != null)
+                return mModel.size();
+            else return 0;
+
+        }
+
+
+        @Override
+        public void onItemClicked(int position) {
+
+            OnCategoryItemListener listener;
+            this.mOnCategoryItemListener.onCategoryItemClicked(mModel.get(position), position);
+        }
+
+        void setCategories(List<CategoriaSecondaria> categories){
+            mModel = categories;
+            notifyDataSetChanged();
+        }
+    }
+
+
+    /*
+     *++++++++++++++++++++END of ViewHOlder and Adapters+++++++++++++++++++++++++++++++
+     */
+
+
+
     /**
      * static factory method
      * @return
      */
-    public static AllLocationsFragment newInstance() {
-        return new AllLocationsFragment();
+    public static InterestsFragment newInstance() {
+        return new InterestsFragment();
     }
 
     /**
      * default constructor
      */
-    public AllLocationsFragment() {}
+    public InterestsFragment() {}
 
     /**
      *
@@ -354,42 +598,90 @@ public class AllLocationsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(LocationsViewModel.class);
-        mViewModel.getAllLocationsWithCategories().observe(this, new Observer<List<LocationDAO.LocationWithCategory>>() {
+
+        mViewModel = ViewModelProviders.of(this).get(InterestsViewModel.class);
+
+        mViewModel.getInterests().observe(this, new Observer<List<CategoriaSecondaria>>() {
             @Override
-            public void onChanged(@Nullable final List<LocationDAO.LocationWithCategory> locations) {
+            public void onChanged(@Nullable final List<CategoriaSecondaria> categories) {
                 // Update the cached copy of the words in the adapter.
-                mAdapter.setLocations(locations);
+                mCategoryAdapter.setCategories(categories);
             }
         });
 
-        mModel = mViewModel.getAllLocationsWithCategories().getValue();
+        // The category adapter
+        mCategoryAdapter = new CategoryAdapter(mViewModel.getInterests().getValue());
+        mCategoryAdapter.setOnCategoryItemListener(new CategoryAdapter.OnCategoryItemListener() {
 
-        // The adapter
-        mAdapter = new LocationAdapter(mModel);
-        mAdapter.setOnLocationItemListener(new LocationAdapter.OnLocationItemListener() {
             @Override
-            public void onLocationItemClicked(LocationDAO.LocationWithCategory loc, int position) {
+            public void onCategoryItemClicked(CategoriaSecondaria cat, int position) {
 
-                TableLayout tableView = ViewUtility.findViewById(
-                        mRecyclerView.findViewHolderForLayoutPosition(position).itemView, R.id.tablelayout);
-                TextView address = ViewUtility.findViewById(
-                        mRecyclerView.findViewHolderForLayoutPosition(position).itemView, R.id.location_address_view);
-                View divider = ViewUtility.findViewById(
-                        mRecyclerView.findViewHolderForLayoutPosition(position).itemView, R.id.divider);
-                address.setMaxLines(3);
+                RecyclerView innerRecyclerView = ViewUtility.findViewById(
+                        mRecyclerView.findViewHolderForLayoutPosition(position).itemView, R.id.inner_recycler_view);
 
-                if (tableView.getVisibility() == View.GONE) {
-                    tableView.setVisibility(View.VISIBLE);
-                    divider.setVisibility(View.VISIBLE);
+                if (!(innerRecyclerView.getVisibility() == View.VISIBLE)) {
+
+                //carica i dati dal DB
+                final LiveData<List<LocationDAO.LocationWithCategory>> liveData =
+                        mViewModel.getLocationsOfSubCategory(cat._id_categoria_secondaria);
+                final List<LocationDAO.LocationWithCategory> model = liveData.getValue();
+
+                //crea l'adapter per le location
+                final LocationAdapter innerLocationAdapter = new LocationAdapter(model);
+
+                //registra l'observer per i cambamenti dinamici dei dati
+                liveData.observe(InterestsFragment.this, new Observer<List<LocationDAO.LocationWithCategory>>() {
+                    @Override
+                    public void onChanged(@Nullable final List<LocationDAO.LocationWithCategory> locations) {
+                        // Update the cached copy of the words in the adapter.
+                        innerLocationAdapter.setLocations(locations);
+                    }
+                });
+
+                //cambia-setta l'adapter della recyclerview
+
+                final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+                layoutManager.setOrientation(RecyclerView.VERTICAL);
+                innerRecyclerView.setLayoutManager(layoutManager);
+                innerRecyclerView.setAdapter(innerLocationAdapter);
+
+                //setta il listner per il click
+                /*innerLocationAdapter.setOnLocationItemListener(new LocationAdapter.OnLocationItemListener() {
+                    @Override
+                    public void onLocationItemClicked(LocationDAO.LocationWithCategory loc, int position) {
+
+
+                        TableLayout tableView = ViewUtility.findViewById(
+                                mRecyclerView.findViewHolderForLayoutPosition(position).itemView, R.id.tablelayout);
+                        TextView address = ViewUtility.findViewById(
+                                mRecyclerView.findViewHolderForLayoutPosition(position).itemView, R.id.location_address_view);
+                        View divider = ViewUtility.findViewById(
+                                mRecyclerView.findViewHolderForLayoutPosition(position).itemView, R.id.divider);
+                        address.setMaxLines(3);
+
+                        if (tableView.getVisibility() == View.GONE) {
+                            tableView.setVisibility(View.VISIBLE);
+                            divider.setVisibility(View.VISIBLE);
+                        } else {
+                            tableView.setVisibility(View.GONE);
+                            divider.setVisibility(View.GONE);
+                            address.setMaxLines(1);
+                        }
+
+
+                    }
+                });*/
+
+                innerRecyclerView.getAdapter().notifyDataSetChanged();
+
+                innerRecyclerView.setVisibility(View.VISIBLE);
+
                 } else {
-                    tableView.setVisibility(View.GONE);
-                    divider.setVisibility(View.GONE);
-                    address.setMaxLines(1);
+                    innerRecyclerView.setVisibility(View.GONE);
                 }
-
             }
         });
+
 
         //setHasOptionsMenu(true);
         setRetainInstance(true);
@@ -401,7 +693,6 @@ public class AllLocationsFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_exlorer, menu);
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
     boolean result;
@@ -417,8 +708,7 @@ public class AllLocationsFragment extends Fragment {
     }
     return result;
   }
-    */
-
+*/
 
     @Override
     public void onActivityCreated(Bundle savedInstance){
@@ -429,9 +719,8 @@ public class AllLocationsFragment extends Fragment {
 
         setRetainInstance(true);
 
-
-
     }
+
 
 
     @Override
@@ -451,8 +740,8 @@ public class AllLocationsFragment extends Fragment {
 
         mRecyclerView.setLayoutManager(layoutManager);
 
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setAdapter(mCategoryAdapter);
+        //mRecyclerView.setHasFixedSize(true);
 
         mRecyclerView.setRecyclerListener(new RecyclerView.RecyclerListener() {
             @Override
@@ -468,7 +757,7 @@ public class AllLocationsFragment extends Fragment {
             @Override
             public void onRefresh() {
 
-                mRecyclerView.setAdapter(mAdapter);
+                mRecyclerView.setAdapter(mCategoryAdapter);
                 mRecyclerView.getAdapter().notifyDataSetChanged();
                 mSwipeRefreshLayout.setRefreshing(false);
             }
@@ -482,7 +771,7 @@ public class AllLocationsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        mAdapter.notifyDataSetChanged();
+        mCategoryAdapter.notifyDataSetChanged();
     }
 
     /*
@@ -499,14 +788,12 @@ public class AllLocationsFragment extends Fragment {
      */
     /*
     public interface OnCardItemSelectedListener {
-
         /**
          * Invoked when we select an item
          *
          * @param catItem The selected Location item
          */ /*
         void onCardItemSelected(LocationWithCategory loc);
-
     }
     */
 

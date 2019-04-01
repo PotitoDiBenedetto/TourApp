@@ -1,4 +1,4 @@
-package com.dibenedetto.potito.tourapp.fragments;
+package com.dibenedetto.potito.temp;
 
 import android.content.Context;
 import android.net.Uri;

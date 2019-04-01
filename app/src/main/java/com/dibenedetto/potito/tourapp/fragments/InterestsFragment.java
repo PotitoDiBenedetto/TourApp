@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.dibenedetto.potito.tourapp.R;
@@ -13,8 +14,8 @@ import com.dibenedetto.potito.tourapp.db.CategoriaSecondaria;
 import com.dibenedetto.potito.tourapp.db.LocationDAO;
 import com.dibenedetto.potito.tourapp.ui.AddressTextView;
 import com.dibenedetto.potito.tourapp.util.ViewUtility;
+import com.dibenedetto.potito.tourapp.viewmodels.InterestsViewModel;
 import com.dibenedetto.potito.tourapp.viewmodels.ResturantsViewModel;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -28,6 +29,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 //import androidx.appcompat.app.AppCompatActivity;
 
@@ -36,7 +38,7 @@ public class InterestsFragment extends Fragment {
     /**
      *
      */
-    private ResturantsViewModel mViewModel;
+    private InterestsViewModel mViewModel;
 
     /**
      * The Reference of the OnCategoryItemSelectedListener if any
@@ -69,6 +71,11 @@ public class InterestsFragment extends Fragment {
      * The Adapter for the locations model
      */
     private LocationAdapter mLocationAdapter;
+
+    /*
+     *
+     */
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     /**
      *
@@ -112,6 +119,12 @@ public class InterestsFragment extends Fragment {
         private TextView mText;
         private TextView mCategory;
         private AddressTextView mAddress;
+        private TextView mDetail;
+        private TextView mTime;
+        private TextView mCost;
+        private TextView mPhone;
+        private TextView mWebsite;
+        private TextView mEmail;
 
         private WeakReference<OnItemClickListener> mOnItemClickListenerRef;
 
@@ -139,6 +152,12 @@ public class InterestsFragment extends Fragment {
             mText = ViewUtility.findViewById(itemView, R.id.location_name);
             mAddress = ViewUtility.findViewById(itemView, R.id.location_address_view);
             mCategory = ViewUtility.findViewById(itemView, R.id.category);
+            mDetail = ViewUtility.findViewById(itemView, R.id.dettaglio);
+            mTime = ViewUtility.findViewById(itemView, R.id.orari);
+            mCost = ViewUtility.findViewById(itemView, R.id.costo);
+            mPhone = ViewUtility.findViewById(itemView, R.id.telefono);
+            mWebsite = ViewUtility.findViewById(itemView, R.id.website);
+            mEmail = ViewUtility.findViewById(itemView, R.id.email);
 
 
             // We register the listener for the onClick
@@ -164,6 +183,12 @@ public class InterestsFragment extends Fragment {
             mText.setText(loc.location.nome_location);
             mAddress.setText(loc.location.indirizzo);
             mCategory.setText(loc.categoriaSecondaria.nome_categoria_secondaria);
+            mDetail.setText(loc.location.dettaglio);
+            mTime.setText(loc.location.orari);
+            mCost.setText(String.valueOf(loc.location.costo));
+            mPhone.setText(String.valueOf(loc.location.telefono));
+            mWebsite.setText(loc.location.web_url);
+            mEmail.setText(loc.location.email);
         }
 
         public void bindEmpty() {
@@ -171,6 +196,12 @@ public class InterestsFragment extends Fragment {
             mText.setText("loading");
             mAddress.setText("loading");
             mCategory.setText("loading");
+            mDetail.setText("loading");
+            mTime.setText("loading");
+            mCost.setText("loading");
+            mPhone.setText("loading");
+            mWebsite.setText("loading");
+            mEmail.setText("loading");
         }
 
         @Override
@@ -263,7 +294,7 @@ public class InterestsFragment extends Fragment {
 
             //for a single type of row
             final View layout = LayoutInflater.from(viewGroup.getContext())
-              .inflate(R.layout.location_row, viewGroup, false);
+              .inflate(R.layout.location_row_2, viewGroup, false);
             return new ItemViewHolder(layout);
 
         }
@@ -560,9 +591,9 @@ public class InterestsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mViewModel = ViewModelProviders.of(this).get(ResturantsViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(InterestsViewModel.class);
 
-        mViewModel.getResturants().observe(this, new Observer<List<CategoriaSecondaria>>() {
+        mViewModel.getInterests().observe(this, new Observer<List<CategoriaSecondaria>>() {
             @Override
             public void onChanged(@Nullable final List<CategoriaSecondaria> categories) {
                 // Update the cached copy of the words in the adapter.
@@ -571,7 +602,7 @@ public class InterestsFragment extends Fragment {
         });
 
         // The category adapter
-        mCategoryAdapter = new CategoryAdapter(mViewModel.getResturants().getValue());
+        mCategoryAdapter = new CategoryAdapter(mViewModel.getInterests().getValue());
         mCategoryAdapter.setOnCategoryItemListener(new CategoryAdapter.OnCategoryItemListener() {
 
             @Override
@@ -583,42 +614,48 @@ public class InterestsFragment extends Fragment {
                 final List<LocationDAO.LocationWithCategory> model = liveData.getValue();
 
                 //crea l'adapter per le location
-                final LocationAdapter innerLocationAdapter = new LocationAdapter(model);
+                mLocationAdapter = new LocationAdapter(model);
 
                 //registra l'observer per i cambamenti dinamici dei dati
                 liveData.observe(InterestsFragment.this, new Observer<List<LocationDAO.LocationWithCategory>>() {
                     @Override
                     public void onChanged(@Nullable final List<LocationDAO.LocationWithCategory> locations) {
                         // Update the cached copy of the words in the adapter.
-                        innerLocationAdapter.setLocations(locations);
+                        mLocationAdapter.setLocations(locations);
                     }
                 });
 
                 //cambia-setta l'adapter della recyclerview
-                RecyclerView innerRecyclerView = ViewUtility.findViewById(
-                        mRecyclerView.findViewHolderForLayoutPosition(position).itemView, R.id.inner_recycler_view);
-
-                final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-                layoutManager.setOrientation(RecyclerView.VERTICAL);
-                innerRecyclerView.setLayoutManager(layoutManager);
-                innerRecyclerView.setAdapter(innerLocationAdapter);
+                mRecyclerView.setAdapter(mLocationAdapter);
 
                 //setta il listner per il click
-                innerLocationAdapter.setOnLocationItemListener(new LocationAdapter.OnLocationItemListener() {
+                mLocationAdapter.setOnLocationItemListener(new LocationAdapter.OnLocationItemListener() {
                     @Override
                     public void onLocationItemClicked(LocationDAO.LocationWithCategory loc, int position) {
 
 
-                        // TODO: expand the cardview
+                        TableLayout tableView = ViewUtility.findViewById(
+                                mRecyclerView.findViewHolderForLayoutPosition(position).itemView, R.id.tablelayout);
+                        TextView address = ViewUtility.findViewById(
+                                mRecyclerView.findViewHolderForLayoutPosition(position).itemView, R.id.location_address_view);
+                        View divider = ViewUtility.findViewById(
+                                mRecyclerView.findViewHolderForLayoutPosition(position).itemView, R.id.divider);
+                        address.setMaxLines(3);
 
-
-                        View view = getActivity().findViewById(R.id.container);
-
-                        Snackbar.make(view, "Replace with your own action - Coupons", Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
+                        if (tableView.getVisibility() == View.GONE) {
+                            tableView.setVisibility(View.VISIBLE);
+                            divider.setVisibility(View.VISIBLE);
+                        } else {
+                            tableView.setVisibility(View.GONE);
+                            divider.setVisibility(View.GONE);
+                            address.setMaxLines(1);
+                        }
 
 
                     } });
+
+                ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
             }
         });
@@ -686,6 +723,18 @@ public class InterestsFragment extends Fragment {
         mRecyclerView.setAdapter(mCategoryAdapter);
         //mRecyclerView.setHasFixedSize(true);
 
+
+        mSwipeRefreshLayout = ViewUtility.findViewById(layout, R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                mRecyclerView.setAdapter(mCategoryAdapter);
+                mRecyclerView.getAdapter().notifyDataSetChanged();
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
         setRetainInstance(true);
 
         return layout;
@@ -721,5 +770,7 @@ public class InterestsFragment extends Fragment {
 
     }
     */
+
+
 
 }

@@ -5,12 +5,12 @@
     <color name="lightRedCippy">#E74C3C</color>
     <color name="colorAccent">#FF5722</color>
     <color name="gray">#CCCCFF</color>
-    <color name="lightBlueCippy">#3498DB</color>
+    <color name="lightBlueCippy">#503498DB</color>
     <color name="lightYellowCippy">#F1C40F</color>
     <color name="lightGreenCippy">#7AC943</color>
     <color name="lightPurpleCippy">#9B59B6</color>
     <color name="colorPrimary">#2962ff</color>
-    <color name="primaryLightColor">#768fff</color>
+    <color name="primaryLightColor">#768FFF</color>
     <color name="colorPrimaryDark">#0039cb</color>
     <color name="primaryTextColor">#ffffff</color>
     <color name="primaryTransparentLightColor">#83768FFF</color>
@@ -19,7 +19,7 @@
     <color name="ex_blue_cippy">#01579B</color>
     <color name="blue_cippy_light">#0277BD</color>
     <color name="cippy_bianco">#e1f5fe</color>
-    <color name="cippy_ombra">#b3e5fc</color>
+    <color name="cippy_ombra">#B3E5FC</color>
 
     <color name="new_primaryColor">#01579b</color>
     <color name="new_primaryLightColor">#4F83CC</color>

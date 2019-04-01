@@ -1,4 +1,4 @@
-package com.dibenedetto.potito.tourapp.fragments;
+package com.dibenedetto.potito.temp;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.dibenedetto.potito.tourapp.R;
@@ -14,11 +13,11 @@ import com.dibenedetto.potito.tourapp.db.CategoriaSecondaria;
 import com.dibenedetto.potito.tourapp.db.LocationDAO;
 import com.dibenedetto.potito.tourapp.ui.AddressTextView;
 import com.dibenedetto.potito.tourapp.util.ViewUtility;
+import com.dibenedetto.potito.tourapp.viewmodels.InterestsViewModel;
 import com.dibenedetto.potito.tourapp.viewmodels.ResturantsViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.lang.ref.WeakReference;
-import java.util.LinkedList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -30,16 +29,15 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 //import androidx.appcompat.app.AppCompatActivity;
 
-public class ResturantsFragment extends Fragment {
+public class InterestsFragment extends Fragment {
 
     /**
      *
      */
-    private ResturantsViewModel mViewModel;
+    private InterestsViewModel mViewModel;
 
     /**
      * The Reference of the OnCategoryItemSelectedListener if any
@@ -72,11 +70,6 @@ public class ResturantsFragment extends Fragment {
      * The Adapter for the locations model
      */
     private LocationAdapter mLocationAdapter;
-
-    /*
-     *
-     */
-    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     /**
      *
@@ -120,12 +113,6 @@ public class ResturantsFragment extends Fragment {
         private TextView mText;
         private TextView mCategory;
         private AddressTextView mAddress;
-        private TextView mDetail;
-        private TextView mTime;
-        private TextView mCost;
-        private TextView mPhone;
-        private TextView mWebsite;
-        private TextView mEmail;
 
         private WeakReference<OnItemClickListener> mOnItemClickListenerRef;
 
@@ -153,16 +140,10 @@ public class ResturantsFragment extends Fragment {
             mText = ViewUtility.findViewById(itemView, R.id.location_name);
             mAddress = ViewUtility.findViewById(itemView, R.id.location_address_view);
             mCategory = ViewUtility.findViewById(itemView, R.id.category);
-            mDetail = ViewUtility.findViewById(itemView, R.id.dettaglio);
-            mTime = ViewUtility.findViewById(itemView, R.id.orari);
-            mCost = ViewUtility.findViewById(itemView, R.id.costo);
-            mPhone = ViewUtility.findViewById(itemView, R.id.telefono);
-            mWebsite = ViewUtility.findViewById(itemView, R.id.website);
-            mEmail = ViewUtility.findViewById(itemView, R.id.email);
 
 
             // We register the listener for the onClick
-            itemView.setOnClickListener(ResturantsFragment.ItemViewHolder.this);
+            itemView.setOnClickListener(InterestsFragment.ItemViewHolder.this);
         }
 
         /**
@@ -184,12 +165,6 @@ public class ResturantsFragment extends Fragment {
             mText.setText(loc.location.nome_location);
             mAddress.setText(loc.location.indirizzo);
             mCategory.setText(loc.categoriaSecondaria.nome_categoria_secondaria);
-            mDetail.setText(loc.location.dettaglio);
-            mTime.setText(loc.location.orari);
-            mCost.setText(String.valueOf(loc.location.costo));
-            mPhone.setText(String.valueOf(loc.location.telefono));
-            mWebsite.setText(loc.location.web_url);
-            mEmail.setText(loc.location.email);
         }
 
         public void bindEmpty() {
@@ -197,12 +172,6 @@ public class ResturantsFragment extends Fragment {
             mText.setText("loading");
             mAddress.setText("loading");
             mCategory.setText("loading");
-            mDetail.setText("loading");
-            mTime.setText("loading");
-            mCost.setText("loading");
-            mPhone.setText("loading");
-            mWebsite.setText("loading");
-            mEmail.setText("loading");
         }
 
         @Override
@@ -295,7 +264,7 @@ public class ResturantsFragment extends Fragment {
 
             //for a single type of row
             final View layout = LayoutInflater.from(viewGroup.getContext())
-              .inflate(R.layout.location_row_2, viewGroup, false);
+                    .inflate(R.layout.location_row, viewGroup, false);
             return new ItemViewHolder(layout);
 
         }
@@ -308,7 +277,7 @@ public class ResturantsFragment extends Fragment {
             } else {
                 itemViewHolder.bindEmpty();
             }
-                itemViewHolder.setOnItemClickListener(ResturantsFragment.LocationAdapter.this);
+            itemViewHolder.setOnItemClickListener(InterestsFragment.LocationAdapter.this);
 
         }
 
@@ -344,7 +313,7 @@ public class ResturantsFragment extends Fragment {
 
 
 
-       /**
+    /**
      * This is the ViewHolder to manage item for the CategoryItem
      */
     public final static class CategoryViewHolder extends RecyclerView.ViewHolder
@@ -352,6 +321,9 @@ public class ResturantsFragment extends Fragment {
 
         private ImageView mImage;
         private TextView mText;
+        private RecyclerView mList;
+        private List<LocationDAO.LocationWithCategory> mModel;
+        private LocationAdapter innerLocationAdapter;
 
         private WeakReference<OnItemClickListener> mOnItemClickListenerRef;
 
@@ -377,10 +349,12 @@ public class ResturantsFragment extends Fragment {
             super(itemView);
             mImage = ViewUtility.findViewById(itemView, R.id.category_icon);
             mText = ViewUtility.findViewById(itemView, R.id.category_name);
+            mList = ViewUtility.findViewById(itemView, R.id.inner_recycler_view);
 
 
             // We register the listener for the onClick
-            itemView.setOnClickListener(ResturantsFragment.CategoryViewHolder.this);
+            itemView.setOnClickListener(InterestsFragment.CategoryViewHolder.this);
+
         }
 
         /**
@@ -397,9 +371,41 @@ public class ResturantsFragment extends Fragment {
          *
          * @param cat The model to map
          */
-        public void bind(CategoriaSecondaria cat) {
+        public void bind(CategoriaSecondaria cat, InterestsViewModel mViewModel) {
             mImage.setImageResource(getCategoryIconId(cat));
             mText.setText(cat.nome_categoria_secondaria);
+            //mList.setLayoutManager();
+            //mList.setAdapter();
+
+            //carica i dati dal DB
+            final LiveData<List<LocationDAO.LocationWithCategory>> liveData =
+                    mViewModel.getLocationsOfSubCategory(cat._id_categoria_secondaria);
+            mModel = liveData.getValue();
+
+            //crea l'adapter per le location
+            innerLocationAdapter = new LocationAdapter(mModel);
+
+            //cambia-setta l'adapter della recyclerview
+
+
+            mList.setAdapter(innerLocationAdapter);
+
+            //setta il listner per il click
+            innerLocationAdapter.setOnLocationItemListener(new LocationAdapter.OnLocationItemListener() {
+                @Override
+                public void onLocationItemClicked(LocationDAO.LocationWithCategory loc, int position) {
+
+
+                    // TODO: expand the cardview
+
+
+
+                    Snackbar.make(mList, "Replace with your own action - Coupons", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+
+
+                } });
+
 
         }
 
@@ -451,6 +457,7 @@ public class ResturantsFragment extends Fragment {
          * The model for the Adapter
          */
         private List<CategoriaSecondaria> mModel;
+        private InterestsViewModel mViewModel;
 
         /**
          * The Reference to the Listener for CategoryItem selection
@@ -479,8 +486,9 @@ public class ResturantsFragment extends Fragment {
          *
          * @param model The model for this Adapter
          */
-        CategoryAdapter(final List<CategoriaSecondaria> model) {
+        CategoryAdapter(final List<CategoriaSecondaria> model, InterestsViewModel viewModel) {
             this.mModel = model;
+            this.mViewModel = viewModel;
         }
 
         /**
@@ -499,7 +507,7 @@ public class ResturantsFragment extends Fragment {
 
             //for a single type of row
             final View layout = LayoutInflater.from(viewGroup.getContext())
-                  .inflate(R.layout.category_row_2, viewGroup, false);
+                    .inflate(R.layout.category_row_2, viewGroup, false);
 
             return new CategoryViewHolder(layout);
         }
@@ -508,11 +516,11 @@ public class ResturantsFragment extends Fragment {
         public void onBindViewHolder(CategoryViewHolder categoryViewHolder, int position) {
 
             if(mModel != null) {
-                categoryViewHolder.bind(mModel.get(position));
+                categoryViewHolder.bind(mModel.get(position), mViewModel);
             } else {
                 categoryViewHolder.bindEmpty();
             }
-                categoryViewHolder.setOnItemClickListener(ResturantsFragment.CategoryAdapter.this);
+            categoryViewHolder.setOnItemClickListener(InterestsFragment.CategoryAdapter.this);
 
         }
 
@@ -540,9 +548,9 @@ public class ResturantsFragment extends Fragment {
     }
 
 
-   /*
-    *++++++++++++++++++++END of ViewHOlder and Adapters+++++++++++++++++++++++++++++++
-    */
+    /*
+     *++++++++++++++++++++END of ViewHOlder and Adapters+++++++++++++++++++++++++++++++
+     */
 
 
 
@@ -550,14 +558,14 @@ public class ResturantsFragment extends Fragment {
      * static factory method
      * @return
      */
-    public static ResturantsFragment newInstance() {
-        return new ResturantsFragment();
+    public static InterestsFragment newInstance() {
+        return new InterestsFragment();
     }
 
     /**
      * default constructor
      */
-    public ResturantsFragment() {}
+    public InterestsFragment() {}
 
     /**
      *
@@ -592,9 +600,9 @@ public class ResturantsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mViewModel = ViewModelProviders.of(this).get(ResturantsViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(InterestsViewModel.class);
 
-        mViewModel.getResturants().observe(this, new Observer<List<CategoriaSecondaria>>() {
+        mViewModel.getInterests().observe(this, new Observer<List<CategoriaSecondaria>>() {
             @Override
             public void onChanged(@Nullable final List<CategoriaSecondaria> categories) {
                 // Update the cached copy of the words in the adapter.
@@ -603,60 +611,45 @@ public class ResturantsFragment extends Fragment {
         });
 
         // The category adapter
-        mCategoryAdapter = new CategoryAdapter(mViewModel.getResturants().getValue());
+        mCategoryAdapter = new CategoryAdapter(mViewModel.getInterests().getValue(), mViewModel);
         mCategoryAdapter.setOnCategoryItemListener(new CategoryAdapter.OnCategoryItemListener() {
 
             @Override
             public void onCategoryItemClicked(CategoriaSecondaria cat, int position) {
 
-                //carica i dati dal DB
-                final LiveData<List<LocationDAO.LocationWithCategory>> liveData =
-                        mViewModel.getLocationsOfSubCategory(cat._id_categoria_secondaria);
-                final List<LocationDAO.LocationWithCategory> model = liveData.getValue();
+                RecyclerView innerRecyclerView = ViewUtility.findViewById(
+                        mRecyclerView.findViewHolderForLayoutPosition(position).itemView, R.id.inner_recycler_view);
 
-                //crea l'adapter per le location
-                mLocationAdapter = new LocationAdapter(model);
+                if (innerRecyclerView.getVisibility() == View.INVISIBLE) {
 
-                //registra l'observer per i cambamenti dinamici dei dati
-                liveData.observe(ResturantsFragment.this, new Observer<List<LocationDAO.LocationWithCategory>>() {
-                    @Override
-                    public void onChanged(@Nullable final List<LocationDAO.LocationWithCategory> locations) {
-                        // Update the cached copy of the words in the adapter.
-                        mLocationAdapter.setLocations(locations);
-                    }
-                });
+                    final LiveData<List<LocationDAO.LocationWithCategory>> liveData =
+                            mViewModel.getLocationsOfSubCategory(cat._id_categoria_secondaria);
 
-                //cambia-setta l'adapter della recyclerview
-                mRecyclerView.setAdapter(mLocationAdapter);
+                    final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+                    layoutManager.setOrientation(RecyclerView.VERTICAL);
+                    innerRecyclerView.setLayoutManager(layoutManager);
 
-                //setta il listner per il click
-                mLocationAdapter.setOnLocationItemListener(new LocationAdapter.OnLocationItemListener() {
-                    @Override
-                    public void onLocationItemClicked(LocationDAO.LocationWithCategory loc, int position) {
+                    //registra l'observer per i cambamenti dinamici dei dati
+                    liveData.observe(InterestsFragment.this, new Observer<List<LocationDAO.LocationWithCategory>>() {
+                        @Override
+                        public void onChanged(@Nullable final List<LocationDAO.LocationWithCategory> locations) {
+                            // Update the cached copy of the words in the adapter.
+                            List<LocationDAO.LocationWithCategory> mModel = liveData.getValue();
 
-
-                        TableLayout tableView = ViewUtility.findViewById(
-                                mRecyclerView.findViewHolderForLayoutPosition(position).itemView, R.id.tablelayout);
-                        TextView address = ViewUtility.findViewById(
-                                mRecyclerView.findViewHolderForLayoutPosition(position).itemView, R.id.location_address_view);
-                        View divider = ViewUtility.findViewById(
-                                mRecyclerView.findViewHolderForLayoutPosition(position).itemView, R.id.divider);
-                        address.setMaxLines(3);
-
-                        if (tableView.getVisibility() == View.GONE) {
-                            tableView.setVisibility(View.VISIBLE);
-                            divider.setVisibility(View.VISIBLE);
-                        } else {
-                            tableView.setVisibility(View.GONE);
-                            divider.setVisibility(View.GONE);
-                            address.setMaxLines(1);
+                            //crea l'adapter per le location
+                            LocationAdapter innerLocationAdapter = new LocationAdapter(mModel);
+                            innerLocationAdapter.setLocations(locations);
                         }
+                    });
 
+                    innerRecyclerView.getAdapter().notifyDataSetChanged();
+                    innerRecyclerView.setVisibility(View.VISIBLE);
 
-                    } });
-
-                ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+                } else if(innerRecyclerView.getVisibility() == View.GONE) {
+                    innerRecyclerView.setVisibility(View.VISIBLE);
+                } else {
+                    innerRecyclerView.setVisibility(View.GONE);
+                }
 
             }
         });
@@ -724,21 +717,15 @@ public class ResturantsFragment extends Fragment {
         mRecyclerView.setAdapter(mCategoryAdapter);
         //mRecyclerView.setHasFixedSize(true);
 
-
-        mSwipeRefreshLayout = ViewUtility.findViewById(layout, R.id.swipe_refresh_layout);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-
-                mRecyclerView.setAdapter(mCategoryAdapter);
-                mRecyclerView.getAdapter().notifyDataSetChanged();
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-        });
-
         setRetainInstance(true);
 
         return layout;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mCategoryAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -771,7 +758,5 @@ public class ResturantsFragment extends Fragment {
 
     }
     */
-
-
 
 }

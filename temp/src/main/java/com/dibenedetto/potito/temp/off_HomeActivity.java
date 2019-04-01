@@ -1,4 +1,4 @@
-package com.dibenedetto.potito.tourapp;
+package com.dibenedetto.potito.temp;
 
 import android.content.Intent;
 import android.os.Bundle;

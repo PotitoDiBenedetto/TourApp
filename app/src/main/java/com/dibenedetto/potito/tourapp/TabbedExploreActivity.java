@@ -7,6 +7,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.dibenedetto.potito.tourapp.fragments.AllLocationsFragment;
+import com.dibenedetto.potito.tourapp.fragments.HotelsFragment;
+import com.dibenedetto.potito.tourapp.fragments.InfopointsFragment;
 import com.dibenedetto.potito.tourapp.fragments.InterestsFragment;
 import com.dibenedetto.potito.tourapp.fragments.ResturantsFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -35,6 +37,11 @@ import static com.dibenedetto.potito.tourapp.util.ViewUtility.findViewById;
 
 public class TabbedExploreActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    /*
+     *
+     */
+    private boolean fragmentOnTop;
+
 
     /**
 
@@ -69,6 +76,7 @@ public class TabbedExploreActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+        toggle.isDrawerIndicatorEnabled();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -91,6 +99,8 @@ public class TabbedExploreActivity extends AppCompatActivity
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+
+        //mViewModel = ViewModelProviders.of(this).get(InterestsViewModel .class);
 
     }
 
@@ -117,18 +127,12 @@ public class TabbedExploreActivity extends AppCompatActivity
                     //break;
                 case 1:
                     return new ResturantsFragment();
-                    //break;
-                /*
                 case 2:
-                    //hotels
-                    break; */
+                    return new HotelsFragment();
                 case 3:
                     return new InterestsFragment();
-                    //break;
-                /*
                 case 4:
-                    //interests
-                    break; */
+                    return new InfopointsFragment();
                 default :
                     //error?
                     return new AllLocationsFragment();
@@ -197,14 +201,16 @@ public class TabbedExploreActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
 
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else if ( getFragmentManager().getBackStackEntryCount() > 0)
         {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             getFragmentManager().popBackStack();
             return;
         } else {
             super.onBackPressed();
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             NavUtils.navigateUpFromSameTask(this);
             /*
             final Intent intent = new Intent(this, MainActivity.class);
@@ -288,6 +294,9 @@ public class TabbedExploreActivity extends AppCompatActivity
         return true;
     }
 
+    public void setBackNavigationEnabled(){
+        this.fragmentOnTop = true;
+    }
 
 
 }
